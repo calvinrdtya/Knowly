@@ -21,6 +21,8 @@ class CreateAttendancesTable extends Migration
             $table->date('date');
             $table->boolean('is_online');
             $table->boolean('is_open');
+            $table->decimal('latitude', 10, 8)->nullable();
+            $table->decimal('longitude', 11, 8)->nullable();
             $table->timestamps();
         });
     }

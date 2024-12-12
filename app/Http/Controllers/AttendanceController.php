@@ -1,192 +1,185 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
 use App\Models\MyClass;
+use App\Models\StudentAttendance;
 use App\Models\StudentRecord;
 use App\Models\Subject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function __construct()
+    public function openAttendance($subject_id, Request $request)
     {
-        $this->middleware('auth');
+        $teacher = auth()->user();
+
+
+        if ($teacher->user_type !== 'teacher') {
+            return redirect()->back()->with('error', 'Hanya guru yang dapat membuka presensi.');
+        }
+
+        
+        $subject = Subject::where('id', $subject_id)->where('teacher_id', $teacher->id)->first();
+        if (!$subject) {
+            return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan.');
+        }
+        // dd($subject);
+
+        $latitude = $request->latitude; // Koordinat lokasi guru
+        $longitude = $request->longitude;
+
+        // dd($subject);
+        
+        $attendance = Attendance::updateOrCreate(
+            [
+                'subject_id' => $subject_id,
+                'date' => now()->toDateString(),
+                'class_id' => $subject->my_class_id
+            ],
+            [
+                'is_open' => true,
+                'is_online' => $request->is_online, // Dari form: Online atau offline
+                'latitude' => $latitude,
+                'longitude' => $longitude,
+            ]
+        );
+
+        return redirect()->back()->with('success', 'Presensi berhasil dibuka.');
     }
 
-    public function index()
+    public function markAttendance(Request $request)
     {
         $student_id = auth()->user()->id;
-        $student = StudentRecord::where('user_id', $student_id)->first();
-        $subject = Subject::with('teacher')->where('my_class_id', $student->my_class_id)->get();
-        $teachers = $subject->map(function ($item) {
-            return $item->teacher;
-        });
+        $subject_id = $request->subject_id;
 
-        // dd($teachers);
-        $d = [];
-        $d['subjects'] = $subject;
-        $d['student'] = $student;
+        $attendance = Attendance::where('subject_id', $subject_id)
+        ->where('date', now()->toDateString())
+        ->where('is_open', true)
+        ->first();
+        
+        
+        if (!$attendance) {
+            return back()->with('error', 'Presensi belum dibuka.');
+        }
+        
+        // dd($student_id, $subject_id, $attendance);
+        
+        if (!$attendance->is_online) {
+            // Mode offline: Periksa jarak
+            $distance = $this->calculateDistance(
+                $attendance->latitude,
+                $attendance->longitude,
+                $request->latitude,
+                $request->longitude
+            );
 
-        // dd($d);
-        return view('pages.student.subject', $d);
+            if ($distance > 20) {
+                return back()->with('error', 'Anda berada di luar jangkauan lokasi presensi.');
+            }
+        }
+
+        // $time = now()->toTimeString();
+        StudentAttendance::create([
+            'student_id' => $student_id,
+            'class_id' => $attendance->class_id,
+            'subject_id' => $subject_id,
+            'date' => now()->toDateString(),
+            'is_online' => $attendance->is_online,
+        ]);
+
+        return back()->with('success', 'Presensi berhasil.');
     }
 
-    public function accessSubject($subject_id)
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371 * 1000; // Radius bumi dalam meter
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon / 2) * sin($dLon / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        return $earthRadius * $c; // Hasil dalam meter
+    }
+
+    public function openAttendanceView($subject_id)
+    {
+
+        $teacher = auth()->user();
+
+        if(!$teacher){
+            return redirect()->route('login');
+        }
+        
+        if ($teacher->user_type !== 'teacher') {
+            return redirect()->back()->with('error', 'Hanya guru yang dapat membuka presensi.');
+        }
+        
+        $subject = Subject::where('slug', $subject_id)->where('teacher_id', $teacher->id)->first();
+        
+        $attendance = DB::table('attendances')
+            ->where('subject_id', $subject->id)
+            ->where('date', now()->toDateString())
+            ->where('is_open', true)
+            ->first();
+        
+
+        if (!$subject) {
+            return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan atau Anda bukan pengajarnya.');
+        }
+
+        $data = [
+            'subject' => $subject,
+            'attendance' => $attendance,
+        ];
+
+        return view('pages.teacher.openAttendance', $data);
+    }
+    public function closeAttendance($attendance_id)
+    {
+        $attendance = Attendance::findOrFail($attendance_id);
+
+        
+        if (auth()->user()->user_type !== 'teacher' || $attendance->subject->teacher_id !== auth()->user()->id) {
+            return back()->with('error', 'Anda tidak memiliki izin untuk menutup presensi ini.');
+        }
+        
+        $attendance->is_open = false;
+        $attendance->save();
+
+        return back()->with('success', 'Presensi berhasil ditutup.');
+    }
+
+    /**
+     * Tampilan untuk siswa melakukan presensi.
+     */
+    public function markAttendanceView($subject_id)
     {
         $student_id = auth()->user()->id;
         $student = StudentRecord::where('user_id', $student_id)->first();
         $subject = Subject::where('slug', $subject_id)->first();
-        $teacher = $subject->teacher;
-        $d = [];
-        $d['subject'] = $subject;
-        $d['subjects'] = Subject::where('my_class_id', $student->my_class_id)->get();
-        $d['student'] = $student;
-        $d['teacher'] = $teacher;
-        // dd($d);
-
-        return view('pages.student.detailSubject', $d);
-    }
-
-    public function subjects(){
-        $teacher = auth()->user();
-
-        if ($teacher->user_type !== 'teacher') {
-            return redirect()->back()->with('error', 'Hanya guru yang dapat membuka presensi.');
-        }
-
-        // $classes = MyClass::where('teacher_id', $teacher->id)->get();
-        $subjects = Subject::where('teacher_id', $teacher->id)->first();
-        dd($subjects);
-
-        return view('pages.teacher.subjects');
-    }
-    public function openAttendanceView($subject_id){
-
-        $teacher = auth()->user();
         
-        if ($teacher->user_type !== 'teacher') {
-            return redirect()->back()->with('error', 'Hanya guru yang dapat membuka presensi.');
+        if (!$student || !$subject) {
+            return redirect()->back()->with('error', 'Data siswa atau mata pelajaran tidak ditemukan.');
         }
         
-
+        $attendance = DB::table('attendances')->where('subject_id', $subject->id)->where('date', now()->toDateString())->first();
         
-    }
-    public function openAttendance($subject_id)
-    {
-        $teacher = auth()->user();
-
-        // Pastikan user adalah guru
-        if ($teacher->role !== 'teacher') {
-            return redirect()->back()->with('error', 'Hanya guru yang dapat membuka presensi.');
-        }
-
-        // Cari mata pelajaran yang diajarkan oleh guru
-        $subject = Subject::where('id', $subject_id)->where('teacher_id', $teacher->id)->first();
-
-        if (!$subject) {
-            return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan atau Anda bukan pengajar mata pelajaran ini.');
-        }
-
-        // Cek apakah presensi sudah ada untuk hari ini
-        $attendance = Attendance::firstOrCreate([
-            'subject_id' => $subject_id,
-            'date' => now()->toDateString(),
-        ], [
-            'is_open' => true, // Membuka presensi
-        ]);
-
-        return redirect()->back()->with('success', 'Presensi berhasil dibuka untuk mata pelajaran ' . $subject->name);
-    }
-
-    public function mark(Request $request)
-    {
-        $student_id = auth()->user()->id;
-        $student = StudentRecord::where('user_id', $student_id)->first();
-        $subject_id = $request->subject_id;
-        $attend = $request->attend;
-        $this->validate($request, [
-            'subject_id' => 'required',
-            'attend' => 'required',
-        ]);
+        
+        $history = StudentAttendance::where('student_id', $student_id)->where('subject_id', $subject->id)->get();
+        
         $data = [
-            'student_id' => $student_id,
-            'subject_id' => $subject_id,
-            'attend' => $attend,
+            'subject' => $subject,
+            'attendance' => $attendance,
+            'history' => $history,
         ];
-        Attendance::create($data);
-        return back()->with('flash_success', __('msg.attend_ok'));
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Attendance $attendance)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Attendance $attendance)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Attendance $attendance)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Attendance  $attendance
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Attendance $attendance)
-    {
-        //
+        return view('pages.student.markAttendance', $data);
     }
 }

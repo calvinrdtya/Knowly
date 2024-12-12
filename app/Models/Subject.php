@@ -24,6 +24,6 @@ class Subject extends Eloquent
         return $this->hasMany(StudentRecord::class, 'subject_id');
     }
     public function attendances(){
-        return $this->hasMany(Attendance::class);
+        return $this->hasMany(Attendance::class, 'subject_id');
     }
 }

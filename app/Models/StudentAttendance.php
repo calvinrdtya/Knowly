@@ -15,4 +15,9 @@ class StudentAttendance extends Model
     {
         return $this->belongsTo(Attendance::class);
     }
+
+    public function student_record()
+    {
+        return $this->belongsTo(StudentRecord::class);
+    }
 }

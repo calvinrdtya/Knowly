@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,9 +10,22 @@ class Attendance extends Model
 {
     use HasFactory;
 
+    protected $table = 'attendances';
+    protected $fillable = [
+        'id',
+        'subject_id',
+        'student_id',
+        'class_id',
+        'date',
+        'is_online',
+        'is_open',
+        'latitude',
+        'longitude',
+    ];
+
     public function subject()
     {
-        return $this->belongsTo(Subject::class);
+        return $this->belongsTo(Subject::class, 'subject_id');
     }
 
     public function student_record()
@@ -21,6 +35,6 @@ class Attendance extends Model
 
     public function teacher()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'teacher_id');
     }
 }
