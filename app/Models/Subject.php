@@ -18,4 +18,12 @@ class Subject extends Eloquent
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
+
+    public function students()
+    {
+        return $this->hasMany(StudentRecord::class, 'subject_id');
+    }
+    public function attendances(){
+        return $this->hasMany(Attendance::class);
+    }
 }

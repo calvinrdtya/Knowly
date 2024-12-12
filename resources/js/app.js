@@ -1,22 +1,50 @@
+import { createApp } from 'vue';
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+const app = createApp({
+    data() {
+        return {
+            messages: [],
+            localStream: null,
+            peers: {},
+        };
+    },
+    mounted() {
+        this.initializePusher();
+        this.getUserMedia();
+    },
+    methods: {
+        initializePusher() {
+            const pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
+                cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+                encrypted: true,
+            });
 
-require('./bootstrap');
+            const channel = pusher.subscribe('meeting.' + meetingId);
 
-window.Vue = require('vue');
+            channel.bind('UserJoinedMeeting', (data) => {
+                this.messages.push(data.message);
+                console.log(`${data.user.name} has joined the meeting.`);
+            });
 
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
+            channel.bind('UserLeftMeeting', (data) => {
+                this.messages.push(data.message);
+                console.log(`${data.user.name} has left the meeting.`);
+            });
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-
-const app = new Vue({
-    el: '#app'
+            channel.bind('MeetingEnded', (data) => {
+                alert(data.message);
+                window.location.href = '/dashboard';
+            });
+        },
+        getUserMedia() {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+                .then((stream) => {
+                    this.localStream = stream;
+                    const video = document.getElementById('localVideo');
+                    video.srcObject = stream;
+                });
+        },
+    },
 });
+
+app.mount('#app');

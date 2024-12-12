@@ -4363,6 +4363,102 @@
             /**
      * 
      *
+     * @see \Illuminate\Encryption\Encrypter
+     */ 
+        class Crypt {
+                    /**
+         * Determine if the given key and cipher combination is valid.
+         *
+         * @param string $key
+         * @param string $cipher
+         * @return bool 
+         * @static 
+         */ 
+        public static function supported($key, $cipher)
+        {
+                        return \Illuminate\Encryption\Encrypter::supported($key, $cipher);
+        }
+                    /**
+         * Create a new encryption key for the given cipher.
+         *
+         * @param string $cipher
+         * @return string 
+         * @static 
+         */ 
+        public static function generateKey($cipher)
+        {
+                        return \Illuminate\Encryption\Encrypter::generateKey($cipher);
+        }
+                    /**
+         * Encrypt the given value.
+         *
+         * @param mixed $value
+         * @param bool $serialize
+         * @return string 
+         * @throws \Illuminate\Contracts\Encryption\EncryptException
+         * @static 
+         */ 
+        public static function encrypt($value, $serialize = true)
+        {
+                        /** @var \Illuminate\Encryption\Encrypter $instance */
+                        return $instance->encrypt($value, $serialize);
+        }
+                    /**
+         * Encrypt a string without serialization.
+         *
+         * @param string $value
+         * @return string 
+         * @throws \Illuminate\Contracts\Encryption\EncryptException
+         * @static 
+         */ 
+        public static function encryptString($value)
+        {
+                        /** @var \Illuminate\Encryption\Encrypter $instance */
+                        return $instance->encryptString($value);
+        }
+                    /**
+         * Decrypt the given value.
+         *
+         * @param string $payload
+         * @param bool $unserialize
+         * @return mixed 
+         * @throws \Illuminate\Contracts\Encryption\DecryptException
+         * @static 
+         */ 
+        public static function decrypt($payload, $unserialize = true)
+        {
+                        /** @var \Illuminate\Encryption\Encrypter $instance */
+                        return $instance->decrypt($payload, $unserialize);
+        }
+                    /**
+         * Decrypt the given string without unserialization.
+         *
+         * @param string $payload
+         * @return string 
+         * @throws \Illuminate\Contracts\Encryption\DecryptException
+         * @static 
+         */ 
+        public static function decryptString($payload)
+        {
+                        /** @var \Illuminate\Encryption\Encrypter $instance */
+                        return $instance->decryptString($payload);
+        }
+                    /**
+         * Get the encryption key.
+         *
+         * @return string 
+         * @static 
+         */ 
+        public static function getKey()
+        {
+                        /** @var \Illuminate\Encryption\Encrypter $instance */
+                        return $instance->getKey();
+        }
+         
+    }
+            /**
+     * 
+     *
      * @see \Illuminate\Database\DatabaseManager
      * @see \Illuminate\Database\Connection
      */ 
@@ -15923,6 +16019,247 @@
      
 }
 
+    namespace MacsiDigital\Zoom\Facades { 
+            /**
+     * 
+     *
+     */ 
+        class Zoom {
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function newRequest()
+        {
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->newRequest();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function oauthRequest()
+        {
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->oauthRequest();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getBuilderClass()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getBuilderClass();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getNode($key)
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getNode($key);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getRequest()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getRequest();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function hasRequest()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->hasRequest();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function setRequest($request)
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->setRequest($request);
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getPerPageField()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getPerPageField();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getPageField()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getPageField();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getAllowedOperands()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getAllowedOperands();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getDefaultOperand()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getDefaultOperand();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getDefaultPaginationRecords()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getDefaultPaginationRecords();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getMaxPaginationRecords()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getMaxPaginationRecords();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getMinPaginationRecords()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getMinPaginationRecords();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getPagination()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getPagination();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getRaw()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getRaw();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getThrowExceptionsIfRaw()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getThrowExceptionsIfRaw();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function hasMaxQueryLimit()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->hasMaxQueryLimit();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getMaxQueries()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getMaxQueries();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getResultsPageField()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getResultsPageField();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getResultsTotalPagesField()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getResultsTotalPagesField();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getResultsPageSizeField()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getResultsPageSizeField();
+        }
+                    /**
+         * 
+         *
+         * @static 
+         */ 
+        public static function getResultsTotalRecordsField()
+        {            //Method inherited from \MacsiDigital\API\Support\Entry         
+                        /** @var \MacsiDigital\Zoom\Support\Entry $instance */
+                        return $instance->getResultsTotalRecordsField();
+        }
+         
+    }
+     
+}
+
     namespace Illuminate\Http { 
             /**
      * 
@@ -16044,6 +16381,7 @@ namespace  {
             class Cache extends \Illuminate\Support\Facades\Cache {}
             class Config extends \Illuminate\Support\Facades\Config {}
             class Cookie extends \Illuminate\Support\Facades\Cookie {}
+            class Crypt extends \Illuminate\Support\Facades\Crypt {}
             class DB extends \Illuminate\Support\Facades\DB {}
             class Eloquent extends \Illuminate\Database\Eloquent\Model {             
                 /**
@@ -19509,6 +19847,7 @@ namespace  {
             class Mk extends \App\Helpers\Mk {}
             class Pay extends \App\Helpers\Pay {}
             class Flare extends \Facade\Ignition\Facades\Flare {}
+            class Zoom extends \MacsiDigital\Zoom\Facades\Zoom {}
      
 }
 

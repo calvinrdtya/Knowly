@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\MeetingController;
+use App\User;
+
 Auth::routes();
 
 //Route::get('/test', 'TestController@index')->name('test');
@@ -170,3 +173,23 @@ Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(
     Route::get('/my_children', 'MyController@children')->name('my_children');
 
 });
+Route::get('student/subjects', 'AttendanceController@index')->name('students.subjects');
+Route::get('student/subjects/{slug}', 'AttendanceController@accessSubject')->name('student.subject.access');
+
+Route::get('subject', 'AttendanceController@subjects')->name('teacher.subjects');
+Route::get('subject/{slug}', 'AttendanceController@openAttendanceView')->name('teacher.subject.access');
+
+
+Route::get('meeting/{host}', [MeetingController::class, 'index'])->name('meeting.index');
+Route::post('meeting/start', [MeetingController::class, 'startMeeting'])->name('meeting.start');
+
+Route::get('meeting/start/{id}', [MeetingController::class, 'start'])->name('meeting.start');
+Route::post('meeting/summary', [MeetingController::class, 'generateSummary'])->name('meeting.summary');
+
+Route::post('meeting/signal', [MeetingController::class, 'signal']);
+
+
+
+Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
+Route::post('/meeting/leave/{id}', [MeetingController::class, 'leaveMeeting'])->name('meeting.leave');
+Route::post('/meeting/end/{id}', [MeetingController::class, 'endMeeting'])->name('meeting.end');
