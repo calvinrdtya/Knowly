@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\QuizController;
 use App\User;
 
 Auth::routes();
@@ -204,4 +205,11 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
     Route::post('/meeting/leave/{id}', [MeetingController::class, 'leaveMeeting'])->name('meeting.leave');
     Route::post('/meeting/end/{id}', [MeetingController::class, 'endMeeting'])->name('meeting.end');
+
+
+Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+Route::get('/quiz/create', [QuizController::class, 'create'])->name('quiz.create');
+Route::post('/quiz/store', [QuizController::class, 'store'])->name('quiz.store');
 });
