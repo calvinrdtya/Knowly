@@ -110,5 +110,8 @@ class StudentRepo {
     {
         return Promotion::where($where)->get();
     }
-
+    // public function findStudentsBySubject($subject_id)
+    // {
+    //     return StudentRecord::where('subject_id', $subject_id)->get();
+    // }
 }

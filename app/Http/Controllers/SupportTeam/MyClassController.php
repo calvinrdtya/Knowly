@@ -28,23 +28,27 @@ class MyClassController extends Controller
         $d['class_types'] = $this->my_class->getTypes();
 
         return view('pages.support_team.classes.index', $d);
+        // return view('back.pages.kelas.index', $d);
     }
 
     public function store(ClassCreate $req)
     {
-        $data = $req->all();
-        $mc = $this->my_class->create($data);
+        try {
+            $data = $req->all();
+            $mc = $this->my_class->create($data);
 
-        // Create Default Section
-        $s =['my_class_id' => $mc->id,
-            'name' => 'A',
-            'active' => 1,
-            'teacher_id' => NULL,
-        ];
+            $s = [
+                'my_class_id' => $mc->id,
+                'name' => 'A',
+                'active' => 1,
+                'teacher_id' => null,
+            ];
+            $this->my_class->createSection($s);
 
-        $this->my_class->createSection($s);
-
-        return Qs::jsonStoreOk();
+            return redirect()->back()->with('success', 'Kelas berhasil dibuat.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Terjadi kesalahan saat membuat kelas: ' . $e->getMessage());
+        }
     }
 
     public function edit($id)
@@ -56,16 +60,27 @@ class MyClassController extends Controller
 
     public function update(ClassUpdate $req, $id)
     {
-        $data = $req->only(['name']);
-        $this->my_class->update($id, $data);
+        try {
+            // Ambil data dari request
+            $data = $req->only(['name']);
 
-        return Qs::jsonUpdateOk();
+            // Update data kelas
+            $this->my_class->update($id, $data);
+
+            // Redirect dengan pesan sukses
+            return redirect()->route('classes.index')->with('success', 'Kelas berhasil diperbarui.');
+        } catch (\Exception $e) {
+            // Redirect dengan pesan error jika terjadi kesalahan
+            return redirect()->back()->with('danger', 'Kelas gagal diperbarui ' . $e->getMessage());
+        }
     }
-
     public function destroy($id)
     {
-        $this->my_class->delete($id);
-        return back()->with('flash_success', __('msg.del_ok'));
-    }
-
+        try {
+            $this->my_class->delete($id);
+            return back()->with('error', 'Kelas Berhasil di Hapus');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Kelas Tidak Berhasil di Hapus');
+        }
+    }    
 }

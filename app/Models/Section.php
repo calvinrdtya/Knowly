@@ -9,18 +9,20 @@ class Section extends Eloquent
 {
     protected $fillable = ['name', 'my_class_id', 'active', 'teacher_id'];
 
-    public function my_class()
+    public function myClass()
     {
-        return $this->belongsTo(MyClass::class);
+        return $this->belongsTo(MyClass::class, 'my_class_id');
     }
-
     public function teacher()
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
-
     public function student_record()
     {
         return $this->hasMany(StudentRecord::class);
+    }
+     public function class()
+    {
+        return $this->belongsTo(MyClass::class, 'my_class_id'); // Foreign key adalah my_class_id
     }
 }

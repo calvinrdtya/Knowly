@@ -7,9 +7,7 @@ use App\Models\MyClass;
 use App\Models\Section;
 use App\Models\Subject;
 
-class MyClassRepo
-{
-
+class MyClassRepo {
     public function all()
     {
         return MyClass::orderBy('name', 'asc')->with('class_type')->get();
@@ -138,5 +136,4 @@ class MyClassRepo
     {
         return Subject::orderBy('name', 'asc')->with(['my_class', 'teacher'])->get();
     }
-
 }

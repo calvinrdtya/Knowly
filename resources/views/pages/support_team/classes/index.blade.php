@@ -41,13 +41,13 @@
                                                 <div class="dropdown-menu dropdown-menu-left">
                                                     @if(Qs::userIsTeamSA())
                                                     {{--Edit--}}
-                                                    <a href="{{ route('classes.edit', $c->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
+                                                    <a href="{{ route('kelas.edit', $c->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
                                                    @endif
-                                                        @if(Qs::userIsSuperAdmin())
+                                                    @if(Qs::userIsSuperAdmin())
                                                     {{--Delete--}}
                                                     <a id="{{ $c->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                                    <form method="post" id="item-delete-{{ $c->id }}" action="{{ route('classes.destroy', $c->id) }}" class="hidden">@csrf @method('delete')</form>
-                                                        @endif
+                                                        <form method="post" id="item-delete-{{ $c->id }}" action="{{ route('kelas.destroy', $c->id) }}" class="hidden">@csrf @method('delete')</form>
+                                                    @endif
 
                                                 </div>
                                             </div>
@@ -72,7 +72,7 @@
 
                     <div class="row">
                         <div class="col-md-6">
-                            <form class="ajax-store" method="post" action="{{ route('classes.store') }}">
+                            <form class="ajax-store" method="post" action="{{ route('kelas.store') }}">
                                 @csrf
                                 <div class="form-group row">
                                     <label class="col-lg-3 col-form-label font-weight-semibold">Name <span class="text-danger">*</span></label>

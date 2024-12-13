@@ -10,7 +10,6 @@ use App\User;
 
 class UserRepo {
 
-
     public function update($id, $data)
     {
         return User::find($id)->update($data);

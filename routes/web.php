@@ -1,17 +1,23 @@
 <?php
 
+use App\Http\Controllers\SupportTeam\SubjectController;
+
 Auth::routes();
 
-//Route::get('/test', 'TestController@index')->name('test');
+// Route::get('/test', 'TestController@index')->name('test');
 Route::get('/privacy-policy', 'HomeController@privacy_policy')->name('privacy_policy');
 Route::get('/terms-of-use', 'HomeController@terms_of_use')->name('terms_of_use');
 
+Route::get('/', function () {
+    return view('home');
+})->name('home')->middleware('guest');
+
+Route::get('/login', 'Auth\LoginController@showLoginForm')->middleware('guest')->name('login');
 
 Route::group(['middleware' => 'auth'], function () {
 
-    Route::get('/', 'HomeController@dashboard')->name('home');
-    Route::get('/home', 'HomeController@dashboard')->name('home');
     Route::get('/dashboard', 'HomeController@dashboard')->name('dashboard');
+    // Route::get('/home', 'HomeController@dashboard')->name('home');
 
     Route::group(['prefix' => 'my_account'], function() {
         Route::get('/', 'MyAccountController@edit_profile')->name('my_account');
@@ -27,7 +33,10 @@ Route::group(['middleware' => 'auth'], function () {
             Route::get('reset_pass/{st_id}', 'StudentRecordController@reset_pass')->name('st.reset_pass');
             Route::get('graduated', 'StudentRecordController@graduated')->name('students.graduated');
             Route::put('not_graduated/{id}', 'StudentRecordController@not_graduated')->name('st.not_graduated');
-            Route::get('list/{class_id}', 'StudentRecordController@listByClass')->name('students.list')->middleware('teamSAT');
+            // Route::get('list/{class_id}', 'StudentRecordController@listByClass')->name('students.list')->middleware('teamSAT');
+
+           
+ 
 
             /* Promotions */
             Route::post('promote_selector', 'PromotionController@selector')->name('students.promote_selector');
@@ -38,6 +47,14 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('promote/{fc}/{fs}/{tc}/{ts}', 'PromotionController@promote')->name('students.promote');
 
         });
+
+        // Route::get('jadwal', 'StudentRecordController@StudentTimetable')->name('students.timetable');
+        // Route::get('jadwal/detail-{class_id}', 'StudentRecordController@listByClass')->name('timetable.detail');
+        // Route::get('jadwal/detail-{subject_id}', 'StudentRecordController@TimetableDetail')->name('timetable.detail');
+
+        Route::get('schedule', 'TeacherController@showSchedule')->name('teacher.schedule');
+        Route::get('students/{subject_id}', 'TeacherController@showStudentRecords')->name('teacher.students');
+
 
         /*************** Users *****************/
         Route::group(['prefix' => 'users'], function(){
@@ -67,7 +84,6 @@ Route::group(['middleware' => 'auth'], function () {
                 Route::get('show/{ttr}', 'TimeTableController@show_record')->name('ttr.show');
                 Route::get('print/{ttr}', 'TimeTableController@print_record')->name('ttr.print');
                 Route::delete('/{ttr}', 'TimeTableController@delete_record')->name('ttr.destroy');
-
             });
 
             /*************** Time Slots *****************/
@@ -83,7 +99,6 @@ Route::group(['middleware' => 'auth'], function () {
 
         /*************** Payments *****************/
         Route::group(['prefix' => 'payments'], function(){
-
             Route::get('manage/{class_id?}', 'PaymentController@manage')->name('payments.manage');
             Route::get('invoice/{id}/{year?}', 'PaymentController@invoice')->name('payments.invoice');
             Route::get('receipts/{id}', 'PaymentController@receipts')->name('payments.receipts');
@@ -132,14 +147,15 @@ Route::group(['middleware' => 'auth'], function () {
             Route::post('select_year/{id}', 'MarkController@year_selected')->name('marks.year_select');
             Route::get('show/{id}/{year}', 'MarkController@show')->name('marks.show');
             Route::get('print/{id}/{exam_id}/{year}', 'MarkController@print_view')->name('marks.print');
-
+            
         });
+        // Route::get('mapel/{id}', [SubjectController::class, 'show'])->name('mapel.show');
 
+        Route::resource('kelas', 'MyClassController');
+        Route::resource('mapel', 'SubjectController');
         Route::resource('students', 'StudentRecordController');
         Route::resource('users', 'UserController');
-        Route::resource('classes', 'MyClassController');
         Route::resource('sections', 'SectionController');
-        Route::resource('subjects', 'SubjectController');
         Route::resource('grades', 'GradeController');
         Route::resource('exams', 'ExamController');
         Route::resource('dorms', 'DormController');

@@ -31,22 +31,24 @@ class SubjectsTableSeeder extends Seeder
         foreach ($my_classes as $my_class) {
 
             $data = [
-
                 [
                     'name' => $subjects[0],
                     'slug' => $sub_slug[0],
                     'my_class_id' => $my_class->id,
-                    'teacher_id' => $teacher_id
+                    'teacher_id' => $teacher_id,
+                    'hari' => 1,
+                    'jam' => '08:00:00',
                 ],
-
                 [
                     'name' => $subjects[1],
                     'slug' => $sub_slug[1],
                     'my_class_id' => $my_class->id,
-                    'teacher_id' => $teacher_id
+                    'teacher_id' => $teacher_id,
+                    'hari' => 3,
+                    'jam' => '10:30:00',
                 ],
-
             ];
+            
 
             DB::table('subjects')->insert($data);
         }

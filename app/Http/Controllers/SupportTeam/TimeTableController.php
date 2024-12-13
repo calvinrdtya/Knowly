@@ -77,7 +77,6 @@ class TimeTableController extends Controller
         $this->tt->update($tt_id, $data);
 
         return back()->with('flash_success', __('msg.update_ok'));
-
     }
 
     public function delete($tt_id)
@@ -150,9 +149,6 @@ class TimeTableController extends Controller
         $this->tt->deleteTimeSlot($ts_id);
         return back()->with('flash_success', __('msg.delete_ok'));
     }
-
-
-    /*********** RECORDS *************/
 
     public function edit_record($ttr_id)
     {

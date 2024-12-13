@@ -8,6 +8,7 @@ use App\Http\Requests\Subject\SubjectUpdate;
 use App\Repositories\MyClassRepo;
 use App\Repositories\UserRepo;
 use App\Http\Controllers\Controller;
+use App\Models\UserType;
 
 class SubjectController extends Controller
 {
@@ -24,21 +25,28 @@ class SubjectController extends Controller
 
     public function index()
     {
+        // $teachers = UserType::where('user_type', 'teacher')->get();
         $d['my_classes'] = $this->my_class->all();
         $d['teachers'] = $this->user->getUserByType('teacher');
         $d['subjects'] = $this->my_class->getAllSubjects();
 
-        return view('pages.support_team.subjects.index', $d);
+        // return view('pages.support_team.subjects.index', $d);
+        return view('back.pages.mata_pelajaran.index', $d);
     }
-
     public function store(SubjectCreate $req)
     {
-        $data = $req->all();
-        $this->my_class->createSubject($data);
+        try {
+            // Menyimpan data subject
+            $data = $req->all();
+            $this->my_class->createSubject($data);
 
-        return Qs::jsonStoreOk();
+            // Mengembalikan response sukses
+            return redirect()->route('mapel.index')->with('success', 'Mata Pelajaran Berhasil Ditambahkan.');
+        } catch (\Exception $e) {
+            // Mengembalikan error jika gagal
+            return redirect()->back()->with('error', 'Mata Pelajaran Gagal Ditambahkan. Kesalahan: ' . $e->getMessage());
+        }
     }
-
     public function edit($id)
     {
         $d['s'] = $sub = $this->my_class->findSubject($id);

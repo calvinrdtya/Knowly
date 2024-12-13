@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateSubjectsTable extends Migration
 {
@@ -19,7 +19,12 @@ class CreateSubjectsTable extends Migration
             $table->string('slug', 100);
             $table->unsignedInteger('my_class_id');
             $table->unsignedInteger('teacher_id');
+            $table->unsignedTinyInteger('hari');
+            $table->time('jam_mulai');
+            $table->time('jam_selesai');
             $table->timestamps();
+            
+            $table->foreign('teacher_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::table('subjects', function (Blueprint $table) {

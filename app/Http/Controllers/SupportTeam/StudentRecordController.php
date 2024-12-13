@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SupportTeam;
 
+use Carbon\Carbon;
 use App\Helpers\Qs;
 use App\Helpers\Mk;
 use App\Http\Requests\Student\StudentRecordCreate;
@@ -15,21 +16,23 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Models\Subject;
+use App\Models\StudentRecord;
 
 class StudentRecordController extends Controller
 {
     protected $loc, $my_class, $user, $student;
 
-   public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
-   {
-       $this->middleware('teamSA', ['only' => ['edit','update', 'reset_pass', 'create', 'store', 'graduated'] ]);
-       $this->middleware('super_admin', ['only' => ['destroy',] ]);
+    public function __construct(LocationRepo $loc, MyClassRepo $my_class, UserRepo $user, StudentRepo $student)
+    {
+        $this->middleware('teamSA', ['only' => ['edit','update', 'reset_pass', 'create', 'store', 'graduated'] ]);
+        $this->middleware('super_admin', ['only' => ['destroy',] ]);
 
-        $this->loc = $loc;
-        $this->my_class = $my_class;
-        $this->user = $user;
-        $this->student = $student;
-   }
+            $this->loc = $loc;
+            $this->my_class = $my_class;
+            $this->user = $user;
+            $this->student = $student;
+    }
 
     public function reset_pass($st_id)
     {
@@ -84,15 +87,65 @@ class StudentRecordController extends Controller
         return Qs::jsonStoreOk();
     }
 
-    public function listByClass($class_id)
-    {
-        $data['my_class'] = $mc = $this->my_class->getMC(['id' => $class_id])->first();
-        $data['students'] = $this->student->findStudentsByClass($class_id);
-        $data['sections'] = $this->my_class->getClassSections($class_id);
+    // public function listByClass($class_id)
+    // {
+    //     $data['my_class'] = $mc = $this->my_class->getMC(['id' => $class_id])->first();
+    //     $data['students'] = $this->student->findStudentsByClass($class_id);
+    //     $data['sections'] = $this->my_class->getClassSections($class_id);
 
-        return is_null($mc) ? Qs::goWithDanger() : view('pages.support_team.students.list', $data);
-    }
+    //     // return is_null($mc) ? Qs::goWithDanger() : view('pages.support_team.students.list', $data);
+    //     return is_null($mc) ? Qs::goWithDanger() : view('teacher.pages.siswa.list', $data);
+    // }
+    
+    // public function TimetableDetail($subject_id)
+    // {
+    //     // Ambil data subject berdasarkan subject_id
+    //     $subject = \App\Models\Subject::find($subject_id);
 
+    //     // Cek apakah data subject ada, jika tidak, arahkan kembali dengan pesan error
+    //     if (is_null($subject)) {
+    //         return redirect()->route('students.timetable')->with('error', 'Mata Pelajaran tidak ditemukan');
+    //     }
+
+    //     // Ambil semua siswa yang terdaftar di mata pelajaran tersebut
+    //     $students = \App\Models\StudentRecord::where('subject_id', $subject_id)->get();
+
+    //     // Menyiapkan data untuk view
+    //     $data = [
+    //         'subject' => $subject,
+    //         'students' => $students
+    //     ];
+
+    //     // Menampilkan data di halaman show
+    //     return view('teacher.pages.siswa.show', $data);
+    // }
+
+
+    // public function StudentTimetable()
+    // {
+    //     // Mendapatkan ID guru yang sedang login
+    //     $teacherId = auth()->user()->id;
+
+    //     $data['subjects'] = Subject::where('teacher_id', $teacherId)->get();
+
+    //     // Format waktu pada setiap subject
+    //     foreach ($data['subjects'] as $subject) {
+    //         $subject->jam = Carbon::parse($subject->jam)->format('H:i');
+    //     }
+    //     return view('teacher.pages.siswa.index', $data);
+
+    // }
+    // public function StudentInformation()
+    // {
+    //     // Mendapatkan ID guru yang sedang login
+    //     $teacherId = auth()->user()->id;
+
+    //     // Ambil semua subjects yang diajarkan oleh guru ini
+    //     $data['subjects'] = Subject::where('teacher_id', $teacherId)->get();  // Mengambil mata pelajaran berdasarkan teacher_id
+
+    //     // Return view dengan data
+    //     return view('teacher.pages.siswa.index', $data);
+    // }
     public function graduated()
     {
         $data['my_classes'] = $this->my_class->all();

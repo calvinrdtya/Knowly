@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Qs;
 use App\Repositories\UserRepo;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -13,10 +14,13 @@ class HomeController extends Controller
         $this->user = $user;
     }
 
-
     public function index()
     {
-        return redirect()->route('dashboard');
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        } else {
+            return view('home');
+        }
     }
 
     public function privacy_policy()
@@ -37,11 +41,41 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        $d=[];
-        if(Qs::userIsTeamSAT()){
-            $d['users'] = $this->user->getAll();
-        }
+        // Ambil tipe user yang sedang login
+        $userType = auth()->user()->user_type;
 
-        return view('pages.support_team.dashboard', $d);
+        // Cek tipe user dan arahkan ke dashboard yang sesuai
+        switch ($userType) {
+            case 'super_admin':
+                return view('back.dashboard');
+                // return view('pages.support_team.dashboard', $d);
+            case 'admin':
+                return view('back.dashboard');
+                // return view('pages.support_team.dashboard', $d);
+            case 'teacher':
+                return view('teacher.teacher');
+                // return view('pages.support_team.dashboard');
+            case 'student':
+                return view('back.dashboard');
+                // return view('pages.support_team.dashboard', $d);
+            case 'accountant':
+                return view('back.dashboard');
+                // return view('pages.support_team.dashboard', $d);
+            default:
+                // Redirect ke halaman error jika tipe user tidak valid
+                return redirect()->route('login')->with('danger', 'Tipe pengguna tidak dikenali.');
+        }
     }
+
+
+    // public function dashboard()
+    // {
+    //     $d=[];
+    //     if(Qs::userIsTeamSAT()){
+    //         $d['users'] = $this->user->getAll();
+    //     }
+
+    //     return view('pages.support_team.dashboard', $d);
+    //     // return view('back.dashboard', $d);
+    // }
 }

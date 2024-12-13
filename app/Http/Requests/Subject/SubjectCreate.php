@@ -23,19 +23,24 @@ class SubjectCreate extends FormRequest
         return [
             'name' => 'required|string|min:3',
             'my_class_id' => 'required',
-            'teacher_id' => 'required',
-            'slug' => 'nullable|string|min:3',
+            'teacher_id' => 'required|exists:users,id,user_type,teacher',
+            'slug' => 'nullable|string|min:1',
+            'hari' => 'required|integer|min:1|max:5',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i',
         ];
     }
-
     public function attributes()
     {
-        return  [
+        return [
             'my_class_id' => 'Class',
             'teacher_id' => 'Teacher',
             'slug' => 'Short Name',
+            'hari' => 'Day',
+            'jam_mulai' => 'Time',
+            'jam_selesai' => 'Time',
         ];
-    }
+    } 
 
     protected function getValidatorInstance()
     {

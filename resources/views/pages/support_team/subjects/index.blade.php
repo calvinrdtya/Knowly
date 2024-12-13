@@ -25,7 +25,7 @@
                 <div class="tab-pane show  active fade" id="new-subject">
                     <div class="row">
                         <div class="col-md-6">
-                            <form class="ajax-store" method="post" action="{{ route('subjects.store') }}">
+                            <form class="ajax-store" method="post" action="{{ route('mapel.store') }}">
                                 @csrf
                                 <div class="form-group row">
                                     <label for="name" class="col-lg-3 col-form-label font-weight-semibold">Name <span class="text-danger">*</span></label>
@@ -74,7 +74,8 @@
                 </div>
 
                 @foreach($my_classes as $c)
-                    <div class="tab-pane fade" id="c{{ $c->id }}">                         <table class="table datatable-button-html5-columns">
+                    <div class="tab-pane fade" id="c{{ $c->id }}">
+                        <table class="table datatable-button-html5-columns">
                             <thead>
                             <tr>
                                 <th>S/N</th>
@@ -103,12 +104,12 @@
                                                 <div class="dropdown-menu dropdown-menu-left">
                                                     {{--edit--}}
                                                     @if(Qs::userIsTeamSA())
-                                                        <a href="{{ route('subjects.edit', $s->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
+                                                        <a href="{{ route('mapel.edit', $s->id) }}" class="dropdown-item"><i class="icon-pencil"></i> Edit</a>
                                                     @endif
                                                     {{--Delete--}}
                                                     @if(Qs::userIsSuperAdmin())
                                                         <a id="{{ $s->id }}" onclick="confirmDelete(this.id)" href="#" class="dropdown-item"><i class="icon-trash"></i> Delete</a>
-                                                        <form method="post" id="item-delete-{{ $s->id }}" action="{{ route('subjects.destroy', $s->id) }}" class="hidden">@csrf @method('delete')</form>
+                                                        <form method="post" id="item-delete-{{ $s->id }}" action="{{ route('mapel.destroy', $s->id) }}" class="hidden">@csrf @method('delete')</form>
                                                     @endif
 
                                                 </div>
