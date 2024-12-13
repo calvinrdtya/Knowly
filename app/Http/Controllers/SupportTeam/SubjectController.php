@@ -69,4 +69,6 @@ class SubjectController extends Controller
         $this->my_class->deleteSubject($id);
         return back()->with('flash_success', __('msg.del_ok'));
     }
+    
+    
 }

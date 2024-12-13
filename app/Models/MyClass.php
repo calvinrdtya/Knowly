@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\User;
 use Eloquent;
 
 class MyClass extends Eloquent
@@ -28,5 +29,10 @@ class MyClass extends Eloquent
     public function student_record()
     {
         return $this->hasMany(StudentRecord::class);
+    }
+
+    public function teacher()
+    {
+        return $this->hasMany(User::class, 'teacher_id');
     }
 }

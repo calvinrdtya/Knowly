@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\SupportTeam\SubjectController;
+use App\Http\Controllers\MeetingController;
+use App\User;
 
 Auth::routes();
 
@@ -185,4 +188,33 @@ Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(
 
     Route::get('/my_children', 'MyController@children')->name('my_children');
 
+});
+
+
+Route::group(['middleware' => 'auth'], function(){
+    
+    Route::get('student/subjects', 'AttendanceController@index')->name('students.subjects');
+    Route::get('student/subjects/{slug}', 'AttendanceController@accessSubject')->name('student.subject.access');
+    
+    Route::get('subject', 'AttendanceController@subjects')->name('teacher.subjects');
+    Route::get('subject/{slug}', 'AttendanceController@openAttendanceView')->name('teacher.subject.access');
+    
+    Route::get('/attendance/open/{subject_id}', [AttendanceController::class, 'openAttendanceView'])->name('attendance.open.view');
+    Route::post('/attendance/open/{subject_id}', [AttendanceController::class, 'openAttendance'])->name('attendance.open');
+    Route::post('/attendance/mark/{subject_id}', [AttendanceController::class, 'markAttendance'])->name('attendance.mark');
+    Route::get('/attendance/mark/{subject_id}', [AttendanceController::class, 'markAttendanceView'])->name('attendance.mark.view');
+    
+    Route::post('/attendance/close/{attendance_id}', [AttendanceController::class, 'closeAttendance'])->name('attendance.close');
+    
+    Route::get('meeting/{host}', [MeetingController::class, 'index'])->name('meeting.index');
+    Route::post('meeting/start', [MeetingController::class, 'startMeeting'])->name('meeting.start');
+    
+    Route::get('meeting/start/{id}', [MeetingController::class, 'start'])->name('meeting.start');
+    Route::post('meeting/summary', [MeetingController::class, 'generateSummary'])->name('meeting.summary');
+    
+    Route::post('meeting/signal', [MeetingController::class, 'signal']);
+    
+    Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
+    Route::post('/meeting/leave/{id}', [MeetingController::class, 'leaveMeeting'])->name('meeting.leave');
+    Route::post('/meeting/end/{id}', [MeetingController::class, 'endMeeting'])->name('meeting.end');
 });

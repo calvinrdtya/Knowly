@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Providers;
+use App\Events\MeetingSummaryGenerated;
+use App\Listeners\SendMeetingSummaryNotification;
 
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
@@ -17,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+        MeetingSummaryGenerated::class => [
+            SendMeetingSummaryNotification::class,
         ],
     ];
 

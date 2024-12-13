@@ -38,4 +38,13 @@ class StudentRecord extends Eloquent
     {
         return $this->belongsTo(Dorm::class);
     }
+    public function attendances()
+    {
+        return $this->hasMany(Attendance::class);
+    }
+
+    public function meetings() {
+        return $this->belongsToMany(Meeting::class, 'meeting_user');
+    }
+    
 }
