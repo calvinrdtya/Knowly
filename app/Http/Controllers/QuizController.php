@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
@@ -6,6 +7,7 @@ use App\Models\Question;
 use App\Models\Quiz;
 use App\Models\UserQuizResult;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class QuizController extends Controller
 {
@@ -15,7 +17,7 @@ class QuizController extends Controller
     }
     public function index()
     {
-        
+
         $quizzes = Quiz::all();
         return view('pages.quizzes.index', compact('quizzes'));
     }
@@ -39,12 +41,14 @@ class QuizController extends Controller
             'questions.*.question' => 'required|string|max:500',
             'questions.*.answers.*.answer' => 'required|string|max:255',
             'questions.*.correct_answer' => 'required|integer',
+            'type' => ['required', Rule::in(Question::getAllowedTypes())],
         ]);
 
         // Simpan kuis
         $quiz = Quiz::create([
             'title' => $request->title,
             'description' => $request->description,
+            'type' => $request->type
         ]);
 
         // Simpan pertanyaan dan jawaban
@@ -69,20 +73,41 @@ class QuizController extends Controller
     {
         $score = 0;
 
-        foreach ($request->input('answers') as $questionId => $answerId) {
-            $correctAnswer = $quiz->questions()->find($questionId)->answers()->where('is_correct', true)->first();
-            if ($correctAnswer && $correctAnswer->id == $answerId) {
-                $score++;
+        foreach ($quiz->questions as $question) {
+            $userAnswer = $request->input('answers.' . $question->id);
+
+            if ($question->type === 'multiple_choice') {
+                // Validasi jawaban untuk pilihan ganda
+                $correctAnswer = $question->answers()->where('is_correct', true)->first();
+                if ($correctAnswer && $correctAnswer->id == $userAnswer) {
+                    $score++;
+                }
+            } elseif ($question->type === 'short_answer') {
+                // Validasi jawaban untuk isian singkat (case-insensitive)
+                $correctAnswer = $question->answers()->first();
+                if ($correctAnswer && strcasecmp($correctAnswer->answer, $userAnswer) === 0) {
+                    $score++;
+                }
             }
+
+            // Simpan hasil untuk setiap pertanyaan
+            UserQuizResult::create([
+                'user_id' => auth()->id(),
+                'quiz_id' => $quiz->id,
+                'question_id' => $question->id,
+                'answer_id' => $question->type === 'multiple_choice' ? $userAnswer : null,
+                'user_answer' => $question->type === 'short_answer' ? $userAnswer : null,
+                'is_correct' => isset($correctAnswer) && (
+                    ($question->type === 'multiple_choice' && $correctAnswer->id == $userAnswer) ||
+                    ($question->type === 'short_answer' && strcasecmp($correctAnswer->answer, $userAnswer) === 0)
+                ),
+                'score' => isset($correctAnswer) && (
+                    ($question->type === 'multiple_choice' && $correctAnswer->id == $userAnswer) ||
+                    ($question->type === 'short_answer' && strcasecmp($correctAnswer->answer, $userAnswer) === 0)
+                ) ? 1 : 0,
+            ]);
         }
 
-        UserQuizResult::create([
-            'user_id' => auth()->user()->id,
-            'quiz_id' => $quiz->id,
-            'question_id' => $questionId,
-            'answer_id' => $answerId,
-            'score' => $score,
-        ]);
 
         return redirect()->route('quizzes.index')->with('success', "Kuis selesai! Skor Anda: $score");
     }

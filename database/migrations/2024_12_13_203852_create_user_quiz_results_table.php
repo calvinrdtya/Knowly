@@ -18,10 +18,13 @@ class CreateUserQuizResultsTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('quiz_id');
             $table->unsignedBigInteger('question_id');
-            $table->unsignedBigInteger('answer_id');
-            $table->integer('score')->default(0);
+            $table->unsignedBigInteger('answer_id')->nullable(); // Untuk pilihan ganda
+            $table->string('user_answer')->nullable(); // Untuk isian singkat
+            $table->boolean('is_correct')->default(false); // Apakah jawaban benar
+            $table->integer('score')->default(0); // Skor tiap jawaban
             $table->timestamps();
         });
+        
     }
 
     /**

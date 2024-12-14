@@ -8,8 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Question extends Model
 {
     use HasFactory;
+    const TYPE_MULTIPLE_CHOICE = 'multiple_choice';
+    const TYPE_SHORT_ANSWER = 'short_answer';
+    protected $fillable = ['quiz_id', 'question', 'type'];
 
-    protected $fillable = ['quiz_id', 'question'];
+    public static function getAllowedTypes()
+    {
+        return [self::TYPE_MULTIPLE_CHOICE, self::TYPE_SHORT_ANSWER];
+    }
 
     public function answers()
     {

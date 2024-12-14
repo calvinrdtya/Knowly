@@ -17,6 +17,7 @@ class CreateQuestionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('quiz_id');
             $table->text('question');
+            $table->enum('type', ['multiple_choice', 'short_answer'])->default('multiple_choice');
             $table->timestamps();
         });
     }

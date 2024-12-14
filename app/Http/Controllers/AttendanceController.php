@@ -203,7 +203,7 @@ class AttendanceController extends Controller
         //     return redirect()->back()->with('error', 'Data siswa atau mata pelajaran tidak ditemukan.');
         // }
 
-        dd($subject, $student);
+        // dd($subject, $student);
 
         $attendance = DB::table('attendances')->where('subject_id', $subject->id)->where('date', now()->toDateString())->first();
 
