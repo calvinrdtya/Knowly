@@ -49,7 +49,7 @@ class StudentRecord extends Eloquent
 
     
 
-    public function assignments() {
+    public function assignments_submissions() {
         return $this->hasMany(AssignmentSubmission::class, 'student_id');
     }
     

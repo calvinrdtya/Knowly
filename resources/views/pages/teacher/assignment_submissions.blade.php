@@ -30,8 +30,8 @@
                                     <td>{{ $submission->student->name }}</td>
                                     <td>{{ $submission->notes }}</td>
                                     <td>
-                                        @if($submission->file)
-                                            <a href="{{ asset('storage/' . $submission->file) }}" target="_blank">Lihat Lampiran</a>
+                                        @if($submission->file_path)
+                                            <a href="{{ asset($submission->file_path) }}" target="_blank">Lihat Lampiran</a>
                                         @else
                                             Tidak ada lampiran
                                         @endif

@@ -23,8 +23,8 @@ class AssignmentSubmission extends Model
         return $this->belongsTo(Assignment::class);
     }
 
-    public function student_record()
+    public function student()
     {
-        return $this->belongsTo(StudentRecord::class, 'student_id');
+        return $this->belongsTo(User::class, 'student_id', 'id');
     }
 }
