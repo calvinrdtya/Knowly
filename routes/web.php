@@ -61,9 +61,10 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::get('jadwal/detail-{subject_id}', 'StudentRecordController@TimetableDetail')->name('timetable.detail');
 
         Route::get('jadwal', 'StudentRecordController@schedule')->name('student.schedule');
+        Route::get('tugas', 'StudentRecordController@tugas')->name('student.assignment');
         // Route::get('schedule/{my_class_id}', 'StudentRecordController@showSchedule')->name('student.schedule.show');
 
-        Route::get('schedule', 'TeacherController@showSchedule')->name('teacher.schedule');
+        Route::get('schedule', 'TeacherController@schedule')->name('teacher.schedule');
         // Route::get('schedule', 'StudentRecordController@schedule')->name('student.schedule');
         
         Route::get('students/{subject_id}', 'TeacherController@showStudentRecords')->name('teacher.students');
@@ -208,8 +209,11 @@ Route::group(['middleware' => 'auth'], function(){
     // Route::get('subject', 'AttendanceController@subjects')->name('teacher.subjects');
     Route::get('subject/{slug}', 'AttendanceController@openAttendanceView')->name('teacher.subject.access');
     
+    // Teacher
     Route::get('/attendance/open/{subject_id}', [AttendanceController::class, 'openAttendanceView'])->name('attendance.open.view');
     Route::post('/attendance/open/{subject_id}', [AttendanceController::class, 'openAttendance'])->name('attendance.open');
+
+    // Student
     Route::post('/attendance/{subject_id}', [AttendanceController::class, 'markAttendance'])->name('attendance.mark');
     Route::get('/attendance/{subject_id}', [AttendanceController::class, 'markAttendanceView'])->name('attendance.mark.view');
     
@@ -223,29 +227,31 @@ Route::group(['middleware' => 'auth'], function(){
     
     Route::post('meeting/signal', [MeetingController::class, 'signal']);
     
-    Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
     Route::post('/meeting/leave/{id}', [MeetingController::class, 'leaveMeeting'])->name('meeting.leave');
+    Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
     Route::post('/meeting/end/{id}', [MeetingController::class, 'endMeeting'])->name('meeting.end');
 
-
-Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
-Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
-Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
-Route::get('/quiz/create', [QuizController::class, 'create'])->name('quiz.create');
-Route::post('/quiz/store', [QuizController::class, 'store'])->name('quiz.store');
+    Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+    Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+    Route::get('/quiz/create', [QuizController::class, 'create'])->name('quiz.create');
+    Route::post('/quiz/store', [QuizController::class, 'store'])->name('quiz.store');
 });
 
 Route::get('assignments', [AssignmentController::class, 'index'])->name('assignments.index');
 Route::post('assignments', [AssignmentController::class, 'store'])->name('assignments.store');
 
-Route::get('assignments/show/{assignment}', [AssignmentController::class, 'show'])->name('assignments.show');
+// Route::get('assignments/{assignment}', [AssignmentController::class, 'show'])->name('assignments.show');
+// Route::get('assignments/{subject_id}/create', [AssignmentController::class, 'create'])->name('assignments.create');
+Route::get('assignments/{subject_id}', [AssignmentController::class, 'openAssignmentView'])->name('assignments.show');
+
+
 Route::get('assignments/submissions/{assignment}', [AssignmentController::class, 'submissions'])->name('assignments.submissions');
 
 
 Route::get('/get-subjects-by-class', [AssignmentController::class, 'getSubjectsByClass']);
 Route::put('assignments/{assignment}/update', [AssignmentController::class, 'update'])->name('assignments.update');
 Route::delete('assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('assignments.destroy');
-Route::get('assignments/create', [AssignmentController::class, 'create'])->name('assignments.create');
 Route::post('assignments/{assignment}/submit', [AssignmentController::class, 'submit'])->name('assignments.submit');
 
 Route::get('assignments/{assignment}/edit', [AssignmentController::class, 'edit'])->name('assignments.edit');

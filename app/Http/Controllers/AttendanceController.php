@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Attendance;
@@ -7,18 +6,11 @@ use App\Models\MyClass;
 use App\Models\StudentAttendance;
 use App\Models\StudentRecord;
 use App\Models\Subject;
-use Geotools\Coordinate\Coordinate;
-use Geotools\Distance\Distance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class AttendanceController extends Controller
 {
-
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
     public function openAttendance($subject_id, Request $request)
     {
         $teacher = auth()->user();
@@ -31,12 +23,13 @@ class AttendanceController extends Controller
         if (!$subject) {
             return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan.');
         }
+        // dd($subject);
 
         $latitude = $request->latitude;
         $longitude = $request->longitude;
 
-        // dd($request->all());
-
+        // dd($subject);
+        
         $attendance = Attendance::updateOrCreate(
             [
                 'subject_id' => $subject_id,
@@ -59,21 +52,18 @@ class AttendanceController extends Controller
         $student_id = auth()->user()->id;
         $subject_id = $request->subject_id;
 
-
         $attendance = Attendance::where('subject_id', $subject_id)
-            ->where('date', now()->toDateString())
-            ->where('is_open', true)
-            ->first();
-
-
+        ->where('date', now()->toDateString())
+        ->where('is_open', true)
+        ->first();
+        
+        
         if (!$attendance) {
             return back()->with('error', 'Presensi belum dibuka.');
         }
-
-        $history = StudentAttendance::where('student_id', $student_id)->where('subject_id', $subject_id)->get();
-
-
-
+        
+        // dd($student_id, $subject_id, $attendance);
+        
         if (!$attendance->is_online) {
             // Mode offline: Periksa jarak
             $distance = $this->calculateDistance(
@@ -83,17 +73,9 @@ class AttendanceController extends Controller
                 $request->longitude
             );
 
-            // dd($attendance->latitude,$attendance->longitude,$request->latitude,$request->longitude,$distance);
-            if ($distance > 50) {
+            if ($distance > 20) {
                 return back()->with('error', 'Anda berada di luar jangkauan lokasi presensi.');
             }
-        }
-
-
-        $historyExists = $history->isNotEmpty();
-
-        if ($historyExists) {
-            return redirect()->route('attendance.mark.view', $subject_id)->with('error', 'Anda sudah melakukan presensi pada hari ini.');
         }
 
         // $time = now()->toTimeString();
@@ -108,65 +90,67 @@ class AttendanceController extends Controller
         return back()->with('success', 'Presensi berhasil.');
     }
 
-    private function calculateDistance($lat1, $lon1, $lat2, $lon2) {
-        // Radius Bumi dalam kilometer
-        $earthRadius = 6371;
-    
-        // Konversi derajat ke radian
-        $lat1 = deg2rad($lat1);
-        $lon1 = deg2rad($lon1);
-        $lat2 = deg2rad($lat2);
-        $lon2 = deg2rad($lon2);
-    
-        // Rumus Haversine
-        $dlat = $lat2 - $lat1;
-        $dlon = $lon2 - $lon1;
-    
-        $a = sin($dlat / 2) * sin($dlat / 2) +
-             cos($lat1) * cos($lat2) *
-             sin($dlon / 2) * sin($dlon / 2);
-    
+    private function calculateDistance($lat1, $lon1, $lat2, $lon2)
+    {
+        $earthRadius = 6371 * 1000; // Radius bumi dalam meter
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+            sin($dLon / 2) * sin($dLon / 2);
+
         $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-    
-        // Hitung jarak
-        $distance = $earthRadius * $c;
-    
-        return $distance; // Jarak dalam kilometer
+
+        return $earthRadius * $c; // Hasil dalam meter
     }
-    
 
     public function openAttendanceView($subject_id)
     {
         $teacher = auth()->user();
+        $student_id = auth()->user()->id;
 
-        if (!$teacher) {
+        $student = StudentRecord::where('user_id', $student_id)->first();
+
+        if(!$teacher){
             return redirect()->route('login');
         }
-
+        
         if ($teacher->user_type !== 'teacher') {
             return redirect()->back()->with('error', 'Hanya guru yang dapat membuka presensi.');
         }
-
-        $subject = Subject::where('slug', $subject_id)->where('teacher_id', $teacher->id)->first();
-
-        if (!$subject) {
-            return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan atau Anda bukan pengajarnya.');
-        }
-
+        
+        $subject = Subject::where('id', $subject_id)->where('teacher_id', $teacher->id)->first();
+        
         $attendance = DB::table('attendances')
             ->where('subject_id', $subject->id)
             ->where('date', now()->toDateString())
             ->where('is_open', true)
             ->first();
 
+        $history = \App\Models\StudentAttendance::orderBy('created_at', 'desc')->get();
 
         if (!$subject) {
             return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan atau Anda bukan pengajarnya.');
         }
+        // Ambil data siswa berdasarkan my_class_id dari subject
+        $students = DB::table('users')
+            ->select('absen', 'name', 'username', 'gender') // Ambil kolom yang dibutuhkan
+            ->where('user_type', 'student') // Filter user_type 'student'
+            ->where('my_class_id', $subject->id) 
+            ->get();
+   
+           $totalMale = $students->where('gender', 'L')->count();
+           $totalFemale = $students->where('gender', 'P')->count();
 
         $data = [
             'subject' => $subject,
             'attendance' => $attendance,
+            'history' => $history,
+            'students' => $students,
+            'totalMale' => $totalMale, // Total siswa L
+            'totalFemale' => $totalFemale,
         ];
 
         return view('teacher.attendance.index', $data);
@@ -175,11 +159,11 @@ class AttendanceController extends Controller
     {
         $attendance = Attendance::findOrFail($attendance_id);
 
-
+        
         if (auth()->user()->user_type !== 'teacher' || $attendance->subject->teacher_id !== auth()->user()->id) {
             return back()->with('error', 'Anda tidak memiliki izin untuk menutup presensi ini.');
         }
-
+        
         $attendance->is_open = false;
         $attendance->save();
 
@@ -226,31 +210,21 @@ class AttendanceController extends Controller
         $totalMale = $students->where('gender', 'L')->count();
         $totalFemale = $students->where('gender', 'P')->count();
             
-        // $student = StudentRecord::where('user_id', $student_id)->first();
-        // $subject = Subject::where('slug', $subject_id)->first();
 
-        // if (!$student || !$subject) {
-        //     return redirect()->back()->with('error', 'Data siswa atau mata pelajaran tidak ditemukan.');
-        // }
-
-        // dd($subject, $student);
-
-        $attendance = DB::table('attendances')->where('subject_id', $subject->id)->where('date', now()->toDateString())->first();
-
-
-        $history = StudentAttendance::where('student_id', $student_id)->where('subject_id', $subject->id)->get();
-
+        // Gabungkan semua data untuk dikirim ke view
         $data = [
             'subject' => $subject,
             'attendance' => $attendance,
             'history' => $history,
             'teachers' => $teachers,
             'students' => $students,
-            'totalMale' => $totalMale,
+            'totalMale' => $totalMale, // Total siswa L
             'totalFemale' => $totalFemale,
         ];
 
         // Kirim data ke view
         return view('student.schedule.show', $data);
     }
+
+
 }

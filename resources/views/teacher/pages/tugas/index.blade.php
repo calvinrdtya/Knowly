@@ -24,28 +24,13 @@
                 <div class="content-wrapper">
                 <!-- Content -->
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    {{-- <div class="row">
-                        <div class="col-lg-8 mb-4">
-                            <div class="card">
-                                <div class="d-flex align-items-end row">
-                                    <div class="col-sm-7">
-                                        <div class="card-body">
-                                            <h5 class="card-title text-primary">Informasi kelas akan muncul disini</h5>
-                                            <p>Lihat jadwal Anda hari ini</p>
-                                            <a href="" class="btn btn-sm btn-outline-primary">Lihat Jadwal</a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="row">                        
                         @foreach($subjects as $subject)
                             <div class="col-lg-4 col-md-12 col-6 mb-4">
                                 <div class="card" style="height: 100%; position: relative;">
                                     <div class="card-body" style="position: relative; height: 100%;">
                                         <div class="card-title d-flex align-items-start justify-content-between mb-0">
-                                            <h5 class="card-title text-dark">{{ $subject->name }}</h5>  <!-- Pastikan $subject adalah objek -->
+                                            <h5 class="card-title text-dark">{{ $subject->name }}</h5>
                                             @php
                                                 $colors = ['bg-label-primary', 'bg-label-secondary', 'bg-label-success', 'bg-label-danger', 'bg-label-info', 'bg-label-warning'];
                                                 $randomColor = $colors[array_rand($colors)];
@@ -75,9 +60,10 @@
                                             $myClass = \App\Models\MyClass::find($subject->my_class_id);
                                         @endphp
                                         <p class="mb-4">{{ $myClass ? $myClass->name : 'Kelas Tidak Ditemukan' }}</p>
-                                        <a href="{{ route('attendance.open.view', ['subject_id' => $subject->id]) }}" class="btn btn-sm btn-info" style="position: absolute; bottom: 14px; right: 14px;">
-                                            Akses Jadwal
+                                        <a href="{{ route('assignments.show', ['subject_id' => $subject->id]) }}" class="btn btn-sm btn-primary">
+                                            Buat Tugas
                                         </a>                                        
+                                        {{-- <a href="{{ route('assignments.create') }}" class="btn btn-primary mb-3">Buat Tugas Baru</a>                                   --}}
                                     </div>
                                 </div>
                             </div>

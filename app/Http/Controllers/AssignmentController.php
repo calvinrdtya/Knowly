@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use DB;
+use App\User;
 use App\Models\Assignment;
 use App\Models\AssignmentSubmission;
 use App\Models\MyClass;
 use App\Models\StudentRecord;
 use App\Models\Subject;
-use App\User;
-use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AssignmentController extends Controller
 {
@@ -20,32 +21,36 @@ class AssignmentController extends Controller
     // Menampilkan daftar tugas untuk guru
     public function index()
     {
+        $teacher_id = Auth::id();
+
+        // Ambil data subject berdasarkan teacher_id
+        $subjects = Subject::where('teacher_id', $teacher_id)->get();
+
         $isTeacher = auth()->user()->user_type;
         if($isTeacher!=='teacher') {
             return redirect()->route('dashboard');
         }
         $assignments = Assignment::where('teacher_id', auth()->user()->id)->get();
         $data = [
-            'assignments' => $assignments
+            'assignments' => $assignments,
+            'subjects' => $subjects,
         ];
-        return view('pages.teacher.assignment', $data);
+        return view('teacher.pages.tugas.index', $data);
     }
 
-    // Menampilkan form membuat tugas
-    public function create()
+    public function create($subject_id)
     {
         // Ambil data kelas yang terkait dengan guru yang sedang login
         $classes = MyClass::whereHas('subjects', function ($query) {
             $query->where('teacher_id', auth()->user()->id);
         })->get();
-
-        // Kirim data kelas ke view
-        return view('pages.teacher.assignment_create', compact('classes'));
-    }
-
-    /**
-     * Ambil data mata pelajaran berdasarkan kelas yang dipilih.
-     */
+    
+        return view('teacher.pages.tugas.create', [
+        // return view('pages.teacher.assignment_create', [
+            'classes' => $classes,
+            'subject_id' => $subject_id,
+        ]);
+    }    
     public function getSubjectsByClass(Request $request)
     {
         $classId = $request->class_id;
@@ -63,9 +68,6 @@ class AssignmentController extends Controller
         // Kembalikan data dalam format JSON
         return response()->json($subjects);
     }
-
-
-
 
     // Menyimpan tugas baru
     public function store(Request $request)
@@ -90,7 +92,7 @@ class AssignmentController extends Controller
     public function edit($id)
     {
         $assignment = Assignment::findOrFail($id)->where('teacher_id', auth()->user()->id)->first();
-        // dd($assignment);
+    
         $classes = MyClass::whereHas('subjects', function ($query) {
             $query->where('teacher_id', auth()->user()->id);
         })->get();
@@ -142,22 +144,73 @@ class AssignmentController extends Controller
     }
 
     public function submissions($assignmentId)
-{
-    // Ambil data assignment dan submission yang terkait dengan assignment tersebut
-    $assignment = Assignment::findOrFail($assignmentId);
+    {
+        // Ambil data assignment dan submission yang terkait dengan assignment tersebut
+        $assignment = Assignment::findOrFail($assignmentId);
 
-    // Ambil data submission yang sudah dikumpulkan
-    $submissions = DB::table('assignment_submissions')
-    ->where('assignment_id', $assignmentId)
-    ->join('student_records', 'assignment_submissions.student_id', '=', 'student_records.id')
-    ->get();
+        // Ambil data submission yang sudah dikumpulkan
+        $submissions = DB::table('assignment_submissions')
+            ->where('assignment_id', $assignmentId)
+            ->join('student_records', 'assignment_submissions.student_id', '=', 'student_records.id')
+            ->get();
 
+        return view('pages.teacher.assignment_submissions', [
+            'assignment' => $assignment,
+            'submissions' => $submissions,
+        ]);
+    }
+    public function openAssignmentView($subject_id)
+    {
+        $teacher = auth()->user();
+        $student_id = auth()->user()->id;
 
+        $student = StudentRecord::where('user_id', $student_id)->first();
 
-    return view('pages.teacher.assignment_submissions', [
-        'assignment' => $assignment,
-        'submissions' => $submissions,
-    ]);
-}
+        if(!$teacher){
+            return redirect()->route('login');
+        }
+        
+        if ($teacher->user_type !== 'teacher') {
+            return redirect()->back()->with('error', 'Hanya guru yang dapat membuka presensi.');
+        }
+        
+        $subject = Subject::where('id', $subject_id)->where('teacher_id', $teacher->id)->first();
+        
+        $attendance = DB::table('attendances')
+            ->where('subject_id', $subject->id)
+            ->where('date', now()->toDateString())
+            ->where('is_open', true)
+            ->first();
 
+        $history = \App\Models\StudentAttendance::orderBy('created_at', 'desc')->get();
+
+        if (!$subject) {
+            return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan atau Anda bukan pengajarnya.');
+        }
+        // Ambil data siswa berdasarkan my_class_id dari subject
+        $students = DB::table('users')
+            ->select('absen', 'name', 'username', 'gender') // Ambil kolom yang dibutuhkan
+            ->where('user_type', 'student') // Filter user_type 'student'
+            ->where('my_class_id', $subject->id) 
+            ->get();
+
+        $assignments = DB::table('assignments')
+            ->where('teacher_id', $teacher->id)
+            ->where('subject_id', $subject->id)
+            ->get();
+   
+           $totalMale = $students->where('gender', 'L')->count();
+           $totalFemale = $students->where('gender', 'P')->count();
+
+        $data = [
+            'subject' => $subject,
+            'attendance' => $attendance,
+            'history' => $history,
+            'students' => $students,
+            'totalMale' => $totalMale,
+            'totalFemale' => $totalFemale,
+            'assignments' => $assignments,
+        ];
+        return view('teacher.pages.tugas.show', $data);
+    }
 }

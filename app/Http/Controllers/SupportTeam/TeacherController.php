@@ -12,6 +12,18 @@ use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
+    public function schedule()
+    {
+        // Ambil ID guru yang sedang login
+        $teacher_id = Auth::id();
+
+        // Ambil data subject berdasarkan teacher_id
+        $subjects = Subject::where('teacher_id', $teacher_id)->get();
+
+        // Mengirimkan data ke view untuk menampilkan jadwal
+        return view('teacher.pages.siswa.index', compact('subjects'));
+    }
+
     public function showSchedule()
     {
         // Ambil ID guru yang sedang login

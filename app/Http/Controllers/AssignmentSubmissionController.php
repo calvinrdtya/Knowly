@@ -16,7 +16,6 @@ class AssignmentSubmissionController extends Controller
         if ($isStudent !== 'student') {
             return redirect()->route('dashboard');
         }
-
         $student = StudentRecord::where('user_id', auth()->user()->id)->firstOrFail();
         
         $assignments = Assignment::where('class_id', $student->my_class_id)
@@ -25,15 +24,14 @@ class AssignmentSubmissionController extends Controller
             }])
             ->get();
 
-
         $data = [
             'assignments' => $assignments
         ];
 
         return view('pages.student.assignment', $data);
+        // return view('student.tugas.index', $data);
     }
 
-    // Menampilkan detail tugas
     public function show($id)
     {
         $assignment = Assignment::findOrFail($id);
@@ -46,28 +44,29 @@ class AssignmentSubmissionController extends Controller
             'isSubmitted' => $isSubmitted,
             'isEditing' => $isEditing
         ];
-        return view('pages.student.assignment_show', $data);
+        // return view('pages.student.assignment_show', $data);
+        return view('student.tugas.show', $data);
     }
 
     // Menyimpan pengumpulan tugas
     public function submit(Request $request, $assignmentId)
-{
-    $validated = $request->validate([
-        'notes' => 'required|string',
-        'file' => 'nullable|file|max:2048', // Maksimal 2MB
-    ]);
+    {
+        $validated = $request->validate([
+            'notes' => 'required|string',
+            'file' => 'nullable|file|max:2048',
+        ]);
 
-    $filePath = $request->file('file') ? $request->file('file')->store('submissions', 'public') : null;
+        $filePath = $request->file('file') ? $request->file('file')->store('submissions', 'public') : null;
 
-    AssignmentSubmission::create([
-        'assignment_id' => $assignmentId,
-        'student_id' => auth()->id(),
-        'notes' => $validated['notes'],
-        'file' => $filePath,
-    ]);
+        AssignmentSubmission::create([
+            'assignment_id' => $assignmentId,
+            'student_id' => auth()->id(),
+            'notes' => $validated['notes'],
+            'file' => $filePath,
+        ]);
 
-    return redirect()->route('student.assignments.show', $assignmentId)->with('success', 'Tugas berhasil dikumpulkan.');
-}
+        return redirect()->route('student.assignments.show', $assignmentId)->with('success', 'Tugas berhasil dikumpulkan.');
+    }
 
     public function update(Request $request, $id)
     {

@@ -85,7 +85,7 @@
       <ul class="menu-sub">
         <li class="menu-item">
           <a href="layouts-without-menu.html" class="menu-link">
-            <div data-i18n="Without menu">Timetables</div>
+            <div data-i18n="Without menu">Kalender</div>
           </a>
         </li>
       </ul>
@@ -107,8 +107,8 @@
         <div data-i18n="Account Settings">Jadwal</div>
       </a>
     </li>
-    <li class="menu-item">
-      <a href="" class="menu-link">
+    <li class="menu-item {{ in_array(Route::currentRouteName(), ['student.assignment', 'student.assignments.show']) ? 'active' : '' }}">
+      <a href="{{ route('student.assignment') }}" class="menu-link">
         <i class='menu-icon bx bxs-file-find'></i>
         <div data-i18n="Account Settings">Tugas</div>
       </a>

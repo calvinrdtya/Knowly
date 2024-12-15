@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Qs;
 use App\Repositories\UserRepo;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Assignment;
 
 class HomeController extends Controller
 {
@@ -41,31 +42,33 @@ class HomeController extends Controller
 
     public function dashboard()
     {
-        // Ambil tipe user yang sedang login
         $userType = auth()->user()->user_type;
 
-        // Cek tipe user dan arahkan ke dashboard yang sesuai
+        // Ambil my_class_id pengguna yang login
+        $myClassId = auth()->user()->my_class_id;
+
+        // Ambil data assignments yang memiliki class_id sama dengan pengguna yang login
+        $assignments = Assignment::where('class_id', $myClassId)->get();
+        // dd($myClassId);
+
+
         switch ($userType) {
             case 'super_admin':
                 return view('back.dashboard');
-                // return view('pages.support_team.dashboard', $d);
             case 'admin':
                 return view('back.dashboard');
-                // return view('pages.support_team.dashboard', $d);
             case 'teacher':
                 return view('teacher.teacher');
-                // return view('pages.support_team.dashboard');
             case 'student':
-                return view('student.student');
-                // return view('pages.support_team.dashboard', $d);
+                return view('student.student', ['assignments' => $assignments]);
             case 'accountant':
                 return view('back.dashboard');
-                // return view('pages.support_team.dashboard', $d);
             default:
-                // Redirect ke halaman error jika tipe user tidak valid
                 return redirect()->route('login')->with('danger', 'Tipe pengguna tidak dikenali.');
         }
     }
+
+
 
 
     // public function dashboard()

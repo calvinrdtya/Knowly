@@ -25,13 +25,7 @@
                 {{ \Carbon\Carbon::parse($assignment->due_date)->format('d M Y, H:i') }}
             </p>
 
-            <form 
-                action="{{ $isSubmitted ? route('student.assignments.update', $submission->id) : route('student.assignments.submit', $assignment->id) }}" 
-                method="POST" 
-                enctype="multipart/form-data" 
-                class="needs-validation" 
-                novalidate
-            >
+            <form action="{{ $isSubmitted ? route('student.assignments.update', $submission->id) : route('student.assignments.submit', $assignment->id) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 @if ($isSubmitted)
                     @method('PUT')

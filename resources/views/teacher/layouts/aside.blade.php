@@ -108,11 +108,40 @@
       <span class="menu-header-text">Ringkasan</span>
     </li>
     {{-- @foreach(App\Models\MyClass::orderBy('name')->get() as $c) --}}
-    <li class="menu-item open {{ request()->routeIs('teacher.schedule') ? 'active' : '' }}">
+    <li class="menu-item open {{ request()->routeIs('teacher.schedule', 'attendance.open.view') ? 'active' : '' }}">
       <a href="{{ route('teacher.schedule') }}" class="menu-link">
         <i class="menu-icon bx bx-book"></i>
         <div data-i18n="Account Settings">Informasi Kelas</div>
       </a>
+    </li>
+    <li class="menu-item open {{ request()->routeIs('assignments.index', 'assignments.create', 'assignments.show') ? 'active' : '' }}">
+      <a href="{{ route('assignments.index') }}" class="menu-link">
+        <i class="menu-icon bx bx-book"></i>
+        <div data-i18n="Account Settings">Tugas</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon bx bx-edit-alt"></i>
+        <div data-i18n="Layouts">Ujian Online</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{{ route('quizzes.index') }}" class="menu-link">
+            <div data-i18n="Without menu">Kuis</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-without-menu.html" class="menu-link">
+            <div data-i18n="Without menu">UTS</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-without-menu.html" class="menu-link">
+            <div data-i18n="Without menu">UAS</div>
+          </a>
+        </li>
+      </ul>
     </li>
     
   

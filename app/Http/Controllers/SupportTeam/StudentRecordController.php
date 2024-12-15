@@ -20,6 +20,8 @@ use Illuminate\Support\Str;
 use App\Models\Subject;
 use App\Models\StudentRecord;
 use App\Models\MyClass;
+use App\Models\Assignment;
+use Illuminate\Http\Request;
 
 class StudentRecordController extends Controller
 {
@@ -259,5 +261,26 @@ class StudentRecordController extends Controller
 
         // Kirimkan data ke view
         return view('student.schedule.index', compact('subjects', 'my_class'));
+    }
+    public function tugas(Request $request)
+    {
+        // Ambil my_class_id dari user yang sedang login
+        $myClassId = auth()->user()->my_class_id;
+    
+        // Ambil subject yang memiliki my_class_id yang sama
+        $subjects = Subject::where('my_class_id', $myClassId)->get();
+    
+        // Kirim data subject ke view
+        $assignments = Assignment::where('class_id', $myClassId);
+
+        if ($request->has('subject')) {
+            // Filter berdasarkan subject_id yang dipilih
+            $assignments = $assignments->where('subject_id', $request->subject);
+        }
+
+        // Ambil tugas-tugas yang sudah difilter
+        $assignments = $assignments->get();
+
+        return view('student.tugas.index', compact('subjects', 'assignments'));
     }
 }

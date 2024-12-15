@@ -167,72 +167,40 @@
                             <div class="row my-0">
                                 <div class="col-md-6">
                                     <h5 class="card-title text-dark">Tugas Terbaru</h5>
-                                    <div class="card card-hov border-1 mb-3" style="height: auto; position: relative;">
-                                        <div class="card-body p-3">
-                                            <div class="card-title">
-                                                <h5 class="card-title text-dark mb-4">Tugas Get Insights from Data</h5>
-                                                <p class="mb-4" id="deskripsi">
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus dolor assumenda distinctio tempora at consequuntur, error sapiente quibusdam unde eligendi nam nulla inventore nihil corrupti minima molestias hic fuga quam.
-                                                </p>
-                                            </div>
-                                            <div class="mt-3">
-                                                <p class="mb-0">Nailussa`ada S.ST., M.Tr.Kom - Basis Data</p>
-                                                <p class="mb-2">Deadline : Kamis, 14 November 2024 - 23:59</p>
-                                            </div>
-                                            <hr class="my-3">
-                                            <div class="d-flex justify-content-between" style="position: relative;">
-                                                {{-- Jika Belum mengumpulkan --}}
-                                                <a href="" class="btn btn-sm btn-outline-danger d-flex align-items-center">
-                                                    <i class='bx bx-x me-2'></i> Belum Mengumpulkan
-                                                </a>
-                                                {{-- Jika Sudah mengumpulkan --}}
-                                                <a href="" class="btn btn-sm btn-outline-success d-flex align-items-center">
-                                                    <i class='bx bx-check me-2'></i> Sudah Mengumpulkan
-                                                </a>
-                                                {{-- Jika mengumpulkan Terlambat --}}
-                                                <a href="" class="btn btn-sm btn-outline-warning d-flex align-items-center">
-                                                    <i class='bx bx-check me-2'></i> Mengumpulkan Terlambar
-                                                </a>
-                                                {{-- Tugas Detail --}}
-                                                <a href="" class="btn btn-sm btn-outline-primary d-flex align-items-center">
-                                                    Detail Tugas <i class='bx bx-right-arrow-alt ms-2'></i>
-                                                </a>                                            
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card card-hov border-1 mb-3" style="height: auto; position: relative;">
-                                        <div class="card-body p-3">
-                                            <div class="card-title">
-                                                <h5 class="card-title text-dark mb-4">Tugas Get Insights from Data</h5>
-                                                <p class="mb-4" id="deskripsi">
-                                                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus dolor assumenda distinctio tempora at consequuntur, error sapiente quibusdam unde eligendi nam nulla inventore nihil corrupti minima molestias hic fuga quam.
-                                                </p>
-                                            </div>
-                                            <div class="mt-3">
-                                                <p class="mb-0">Nailussa`ada S.ST., M.Tr.Kom - Basis Data</p>
-                                                <p class="mb-2">Deadline : Kamis, 14 November 2024 - 23:59</p>
-                                            </div>
-                                            <hr class="my-3">
-                                            <div class="d-flex justify-content-between" style="position: relative;">
-                                                {{-- Jika Belum mengumpulkan --}}
-                                                <a href="" class="btn btn-sm btn-outline-danger d-flex align-items-center">
-                                                    <i class='bx bx-x me-2'></i> Belum Mengumpulkan
-                                                </a>
-                                                {{-- Jika Sudah mengumpulkan --}}
-                                                <a href="" class="btn btn-sm btn-outline-success d-flex align-items-center">
-                                                    <i class='bx bx-check me-2'></i> Sudah Mengumpulkan
-                                                </a>
-                                                {{-- Jika mengumpulkan Terlambat --}}
-                                                <a href="" class="btn btn-sm btn-outline-warning d-flex align-items-center">
-                                                    <i class='bx bx-check me-2'></i> Mengumpulkan Terlambar
-                                                </a>
-                                                {{-- Tugas Detail --}}
-                                                <a href="" class="btn btn-sm btn-outline-primary d-flex align-items-center">
-                                                    Detail Tugas <i class='bx bx-right-arrow-alt ms-2'></i>
-                                                </a>                                            
+                                        @foreach($assignments as $assignment)
+                                            <div class="card border-1 my-4">
+                                                <div class="card-body p-3">
+                                                    <div class="card-title">
+                                                        <h5 class="card-title text-dark mb-4">{{ $assignment->title }}</h5>
+                                                        <p class="mb-4">{{ substr($assignment->description, 0, 150) . '...' }}</p>
+                                                    </div>
+                                                    <div class="mt-3">
+                                                        <p class="mb-2" id="deskripsi">Guru : {{ $assignment->teacher->name }}</p>
+                                                        <p class="mb-2" id="deskripsi">Deadline : {{ \Carbon\Carbon::parse($assignment->due_date)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}</p>
+                                                    </div>
+                                                    <hr class="my-3">
+                                                    <div class="d-flex justify-content-between">
+                                                        @php
+                                                            $submission = $assignment->submissions->where('student_id', auth()->id())->first();
+                                                        @endphp
+                                                        @if ($submission)
+                                                            <button class="btn btn-sm btn-outline-success d-flex align-items-center">
+                                                                <i class='bx bx-check me-2'></i> Sudah Mengumpulkan
+                                                            </button>
+                                                            {{-- <span class="text-success">Sudah Dikumpulkan</span> pada 
+                                                            {{ \Carbon\Carbon::parse($submission->created_at)->format('d M Y, H:i') }} --}}
+                                                        @else
+                                                            <a href="" class="btn btn-sm btn-outline-danger d-flex align-items-center">
+                                                                <i class='bx bx-x me-2'></i> Belum Mengumpulkan
+                                                            </a>
+                                                        @endif
+                                                    <a href="{{ route('student.assignments.show', $assignment->id) }}" class="btn btn-sm btn-outline-primary d-flex align-items-center">
+                                                        Detail Tugas <i class='bx bx-right-arrow-alt ms-2'></i>
+                                                    </a>                                            
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endforeach
                                 </div>                
                                 <div class="col-md-1">
                                     </div>            
@@ -264,7 +232,8 @@
                                             </a>                                                                            
                                         </div>
                                     </div>
-                                    <div class="card card-hov border-1 mb-3" style="height: auto; position: relative;">
+                                    
+                                    {{-- <div class="card card-hov border-1 mb-3" style="height: auto; position: relative;">
                                         <div class="card-body p-3">
                                             <div class="card-title">
                                                 <h5 class="card-title text-dark mb-1">Formulir Kelulusan PENS 2024</h5>
@@ -289,7 +258,7 @@
                                                 </div>
                                             </a>                                                                            
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>                            
                             </div>  
                         </div> 

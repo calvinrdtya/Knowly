@@ -41,7 +41,7 @@ class SubjectController extends Controller
         // Return data ke view
         return view('back.pages.mata_pelajaran.index', $d);
 
-        return view('pages.support_team.subjects.index', $d);
+        // return view('pages.support_team.subjects.index', $d);
     }
 
     // public function index()
