@@ -95,7 +95,7 @@
                                                                             @foreach($my_classes as $c)
                                                                                 <option value="{{ $c->id }}" {{ old('my_class_id') == $c->id ? 'selected' : '' }}>{{ $c->name }}</option>
                                                                             @endforeach
-                                                                        </select>
+                                                                            </select>
                                                                         @error('my_class_id')
                                                                             <span class="text-danger">{{ $message }}</span>
                                                                         @enderror
@@ -104,14 +104,20 @@
                                                                 <div class="row mb-3">
                                                                     <label for="teacher_id" class="col-form-label col-md-3">Pilih Guru<span class="text-danger">*</span></label>
                                                                     <div class="col-md-9">
-                                                                        <select name="teacher_id" class="form-select" required>
+                                                                        <select class="form-select" id="teacher_id" name="teacher_id" required>
+                                                                            <option value="">-- Pilih Guru --</option>
+                                                                            @foreach($teachers as $teacher)
+                                                                                <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
+                                                                            @endforeach
+                                                                        </select>                                                                       
+                                                                        
+                                                                        {{-- <select class="form-select" name="teacher_id" id="teacher_id" required>
                                                                             <option selected>Pilih Guru</option>
                                                                             @foreach($teachers as $teacher)
-                                                                                <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>
-                                                                                    {{ $teacher->name }}
-                                                                                </option>
+                                                                                <option value="{{ $teacher->id }}" {{ old('teacher_id') == $teacher->id ? 'selected' : '' }}>{{ $teacher->name }}</option>
+                                                                                <option value="{{ Qs::hash($teacher->id) }}" {{ old('teacher_id') == Qs::hash($teacher->id) ? 'selected' : '' }}>{{ $teacher->name }}</option>
                                                                             @endforeach
-                                                                        </select>                                                                        
+                                                                        </select> --}}
                                                                         @error('teacher_id')
                                                                             <span class="text-danger">{{ $message }}</span>
                                                                         @enderror

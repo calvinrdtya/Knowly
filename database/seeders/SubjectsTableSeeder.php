@@ -23,8 +23,8 @@ class SubjectsTableSeeder extends Seeder
 
     protected function createSubjects()
     {
-        $subjects = ['English Language', 'Mathematics'];
-        $sub_slug = ['Eng', 'Math'];
+        $subjects = ['Bahasa Inggris', 'Matematika'];
+        $sub_slug = ['B. Inggris', 'Math'];
         $teacher_id = User::where(['user_type' => 'teacher'])->first()->id;
         $my_classes = MyClass::all();
 
@@ -36,8 +36,9 @@ class SubjectsTableSeeder extends Seeder
                     'slug' => $sub_slug[0],
                     'my_class_id' => $my_class->id,
                     'teacher_id' => $teacher_id,
-                    'hari' => 1,
-                    'jam' => '08:00:00',
+                    'hari' => 2,
+                    'jam_mulai' => '08:00:00',
+                    'jam_selesai' => '09:20:00',
                 ],
                 [
                     'name' => $subjects[1],
@@ -45,14 +46,11 @@ class SubjectsTableSeeder extends Seeder
                     'my_class_id' => $my_class->id,
                     'teacher_id' => $teacher_id,
                     'hari' => 3,
-                    'jam' => '10:30:00',
+                    'jam_mulai' => '08:00:00',
+                    'jam_selesai' => '09:20:00',
                 ],
             ];
-            
-
             DB::table('subjects')->insert($data);
         }
-
     }
-
 }

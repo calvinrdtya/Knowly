@@ -3,6 +3,7 @@
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\SupportTeam\SubjectController;
 use App\Http\Controllers\MeetingController;
+use App\Http\Controllers\SupportTeam\StudentRecordController;
 use App\User;
 
 Auth::routes();
@@ -55,7 +56,12 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::get('jadwal/detail-{class_id}', 'StudentRecordController@listByClass')->name('timetable.detail');
         // Route::get('jadwal/detail-{subject_id}', 'StudentRecordController@TimetableDetail')->name('timetable.detail');
 
+        Route::get('jadwal', 'StudentRecordController@schedule')->name('student.schedule');
+        // Route::get('schedule/{my_class_id}', 'StudentRecordController@showSchedule')->name('student.schedule.show');
+
         Route::get('schedule', 'TeacherController@showSchedule')->name('teacher.schedule');
+        // Route::get('schedule', 'StudentRecordController@schedule')->name('student.schedule');
+        
         Route::get('students/{subject_id}', 'TeacherController@showStudentRecords')->name('teacher.students');
 
 
@@ -192,17 +198,16 @@ Route::group(['namespace' => 'MyParent','middleware' => 'my_parent',], function(
 
 
 Route::group(['middleware' => 'auth'], function(){
+    // Route::get('student/subjects', 'AttendanceController@index')->name('students.subjects');
+    // Route::get('student/subjects/{slug}', 'AttendanceController@accessSubject')->name('student.subject.access');
     
-    Route::get('student/subjects', 'AttendanceController@index')->name('students.subjects');
-    Route::get('student/subjects/{slug}', 'AttendanceController@accessSubject')->name('student.subject.access');
-    
-    Route::get('subject', 'AttendanceController@subjects')->name('teacher.subjects');
+    // Route::get('subject', 'AttendanceController@subjects')->name('teacher.subjects');
     Route::get('subject/{slug}', 'AttendanceController@openAttendanceView')->name('teacher.subject.access');
     
     Route::get('/attendance/open/{subject_id}', [AttendanceController::class, 'openAttendanceView'])->name('attendance.open.view');
     Route::post('/attendance/open/{subject_id}', [AttendanceController::class, 'openAttendance'])->name('attendance.open');
-    Route::post('/attendance/mark/{subject_id}', [AttendanceController::class, 'markAttendance'])->name('attendance.mark');
-    Route::get('/attendance/mark/{subject_id}', [AttendanceController::class, 'markAttendanceView'])->name('attendance.mark.view');
+    Route::post('/attendance/{subject_id}', [AttendanceController::class, 'markAttendance'])->name('attendance.mark');
+    Route::get('/attendance/{subject_id}', [AttendanceController::class, 'markAttendanceView'])->name('attendance.mark.view');
     
     Route::post('/attendance/close/{attendance_id}', [AttendanceController::class, 'closeAttendance'])->name('attendance.close');
     

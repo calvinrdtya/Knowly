@@ -19,15 +19,13 @@ class AttendanceController extends Controller
         if ($teacher->user_type !== 'teacher') {
             return redirect()->back()->with('error', 'Hanya guru yang dapat membuka presensi.');
         }
-
-        
         $subject = Subject::where('id', $subject_id)->where('teacher_id', $teacher->id)->first();
         if (!$subject) {
             return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan.');
         }
         // dd($subject);
 
-        $latitude = $request->latitude; // Koordinat lokasi guru
+        $latitude = $request->latitude;
         $longitude = $request->longitude;
 
         // dd($subject);
@@ -110,7 +108,6 @@ class AttendanceController extends Controller
 
     public function openAttendanceView($subject_id)
     {
-
         $teacher = auth()->user();
 
         if(!$teacher){
@@ -139,7 +136,7 @@ class AttendanceController extends Controller
             'attendance' => $attendance,
         ];
 
-        return view('pages.teacher.openAttendance', $data);
+        return view('teacher.attendance.index', $data);
     }
     public function closeAttendance($attendance_id)
     {
@@ -158,28 +155,59 @@ class AttendanceController extends Controller
 
     /**
      * Tampilan untuk siswa melakukan presensi.
-     */
+     */ 
     public function markAttendanceView($subject_id)
     {
+        \Carbon\Carbon::setLocale('id');
         $student_id = auth()->user()->id;
+
+        // Ambil data siswa berdasarkan user_id
         $student = StudentRecord::where('user_id', $student_id)->first();
-        $subject = Subject::where('slug', $subject_id)->first();
-        
+
+        // Ambil subject berdasarkan ID atau slug
+        $subject = Subject::where('id', $subject_id)->orWhere('slug', $subject_id)->first();
+
         if (!$student || !$subject) {
             return redirect()->back()->with('error', 'Data siswa atau mata pelajaran tidak ditemukan.');
         }
-        
-        $attendance = DB::table('attendances')->where('subject_id', $subject->id)->where('date', now()->toDateString())->first();
-        
-        
-        $history = StudentAttendance::where('student_id', $student_id)->where('subject_id', $subject->id)->get();
-        
+
+        // Ambil kehadiran hari ini
+        $attendance = DB::table('attendances')
+            ->where('subject_id', $subject->id)
+            ->where('date', now()->toDateString())
+            ->first();
+
+        // Ambil riwayat kehadiran siswa
+        $history = \App\Models\StudentAttendance::orderBy('created_at', 'desc')->get();
+
+        // Ambil data guru sesuai dengan user_type teacher
+        $teachers = DB::table('users')->where('user_type', 'teacher')->get();
+
+        // Ambil data siswa berdasarkan my_class_id dari subject
+        $students = DB::table('users')
+            ->select('absen', 'name', 'username', 'gender') // Ambil kolom yang dibutuhkan
+            ->where('user_type', 'student') // Filter user_type 'student'
+            ->where('my_class_id', $subject->id) 
+            ->get();
+
+        $totalMale = $students->where('gender', 'L')->count();
+        $totalFemale = $students->where('gender', 'P')->count();
+            
+
+        // Gabungkan semua data untuk dikirim ke view
         $data = [
             'subject' => $subject,
             'attendance' => $attendance,
             'history' => $history,
+            'teachers' => $teachers,
+            'students' => $students,
+            'totalMale' => $totalMale, // Total siswa L
+            'totalFemale' => $totalFemale,
         ];
 
-        return view('pages.student.markAttendance', $data);
+        // Kirim data ke view
+        return view('student.schedule.show', $data);
     }
+
+
 }

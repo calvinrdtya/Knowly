@@ -15,15 +15,16 @@ class CreateMeetingsTable extends Migration
     {
         Schema::create('meetings', function (Blueprint $table) {
             $table->id();
-            $table->string('host'); // Nama guru/siswa
-            $table->string('subject'); // Mata pelajaran terkait
-            $table->string('link'); // Link unik meeting
+            $table->string('host');
+            $table->string('subject');
+            $table->string('link');
             $table->text('meeting_notes')->nullable();
             $table->text('summary')->nullable();
-            $table->foreignId('meeting_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->unsignedBigInteger('meeting_id')->nullable();
+            $table->foreign('meeting_id')->references('id')->on('meetings')->onDelete('cascade');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
-        });
+        });             
     }
 
     /**

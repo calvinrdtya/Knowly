@@ -19,8 +19,10 @@
     <link rel="stylesheet" href="{{ asset('all/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('all/assets/vendor/libs/apex-charts/apex-charts.css') }}">
     <link rel="stylesheet" href="{{ asset('all/assets/vendor/css/pages/page-auth.css') }}">
+
     <script src="{{ asset('all/assets/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('all/assets/js/config.js') }}"></script>
+    
   </head>
 <body>
 

@@ -90,32 +90,54 @@
         </li>
       </ul>
     </li>
-    <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class="menu-icon bx bx-file"></i>
-        <div data-i18n="Layouts">Administrasi</div>
-      </a>
-      <ul class="menu-sub">
-        <li class="menu-item">
-          <a href="layouts-without-menu.html" class="menu-link">
-            <div data-i18n="Without menu">Pembayaran</div>
-          </a>
-        </li>
-      </ul>
-    </li>
 
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text">Ringkasan</span>
     </li>
     {{-- @foreach(App\Models\MyClass::orderBy('name')->get() as $c) --}}
-    <li class="menu-item open {{ request()->routeIs('teacher.schedule') ? 'active' : '' }}">
-      <a href="{{ route('teacher.schedule') }}" class="menu-link">
+    <li class="menu-item {{ in_array(Route::currentRouteName(), ['student.schedule', 'attendance.mark.view']) ? 'active' : '' }}">
+      <a href="{{ route('student.schedule') }}" class="menu-link">
         <i class="menu-icon bx bx-book"></i>
-        <div data-i18n="Account Settings">Informasi Kelas</div>
+        <div data-i18n="Account Settings">Mata Pelajaran</div>
       </a>
     </li>
-    
+    <li class="menu-item">
+      <a href="" class="menu-link">
+        <i class="menu-icon bx bx-calendar"></i>
+        <div data-i18n="Account Settings">Jadwal</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="" class="menu-link">
+        <i class='menu-icon bx bxs-file-find'></i>
+        <div data-i18n="Account Settings">Tugas</div>
+      </a>
+    </li>
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon bx bx-edit-alt"></i>
+        <div data-i18n="Layouts">Ujian Online</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="layouts-without-menu.html" class="menu-link">
+            <div data-i18n="Without menu">Kuis</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-without-menu.html" class="menu-link">
+            <div data-i18n="Without menu">UTS</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-without-menu.html" class="menu-link">
+            <div data-i18n="Without menu">UAS</div>
+          </a>
+        </li>
+      </ul>
+    </li>
   
+    
     {{-- @endforeach --}}
     {{-- @foreach(App\Models\MyClass::orderBy('name')->get() as $c)
     <ul class="menu-sub">

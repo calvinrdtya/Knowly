@@ -56,7 +56,7 @@ class HomeController extends Controller
                 return view('teacher.teacher');
                 // return view('pages.support_team.dashboard');
             case 'student':
-                return view('back.dashboard');
+                return view('student.student');
                 // return view('pages.support_team.dashboard', $d);
             case 'accountant':
                 return view('back.dashboard');

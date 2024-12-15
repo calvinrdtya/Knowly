@@ -3,7 +3,7 @@
       <i class="bx bx-menu bx-sm"></i>
     </a>
   </div>
-
+  
   <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
     <!-- Search -->
     <div class="navbar-nav align-items-center">
@@ -18,10 +18,10 @@
       </div>
     </div>
     <!-- /Search -->
-
+  
     <ul class="navbar-nav flex-row align-items-center ms-auto">
       <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
-
+  
       <!-- User -->
       <li class="nav-item navbar-dropdown dropdown-user dropdown">
         <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
@@ -76,4 +76,4 @@
       </li>
       <!--/ User -->
     </ul>
-  </div>
+</div>

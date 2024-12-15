@@ -41,52 +41,52 @@
                     </div>
                     <div class="row">                        
                         @foreach($subjects as $subject)
-    <div class="col-lg-4 col-md-12 col-6 mb-4">
-        <div class="card" style="height: 100%; position: relative;">
-            <div class="card-body" style="position: relative; height: 100%;">
-                <div class="card-title d-flex align-items-start justify-content-between mb-0">
-                    <h5 class="card-title text-dark">{{ $subject->name }}</h5>  <!-- Pastikan $subject adalah objek -->
-                    @php
-                        $colors = ['bg-label-primary', 'bg-label-secondary', 'bg-label-success', 'bg-label-danger', 'bg-label-info', 'bg-label-warning'];
-                        $randomColor = $colors[array_rand($colors)];
-                    @endphp
-                    
-                    <span class="badge {{ $randomColor }} rounded-pill">{{ $subject->slug }}</span>
-                </div>
+                            <div class="col-lg-4 col-md-12 col-6 mb-4">
+                                <div class="card" style="height: 100%; position: relative;">
+                                    <div class="card-body" style="position: relative; height: 100%;">
+                                        <div class="card-title d-flex align-items-start justify-content-between mb-0">
+                                            <h5 class="card-title text-dark">{{ $subject->name }}</h5>  <!-- Pastikan $subject adalah objek -->
+                                            @php
+                                                $colors = ['bg-label-primary', 'bg-label-secondary', 'bg-label-success', 'bg-label-danger', 'bg-label-info', 'bg-label-warning'];
+                                                $randomColor = $colors[array_rand($colors)];
+                                            @endphp
+                                            
+                                            <span class="badge {{ $randomColor }} rounded-pill">{{ $subject->slug }}</span>
+                                        </div>
 
-                @php
-                    $days = [
-                        1 => 'Senin',
-                        2 => 'Selasa',
-                        3 => 'Rabu',
-                        4 => 'Kamis',
-                        5 => 'Jumat',
-                        6 => 'Sabtu',
-                        7 => 'Minggu',
-                    ];
-                    $dayName = $days[$subject->hari] ?? 'Unknown';
-                @endphp
-                <span class="fw-semibold d-block mb-3">
-                    {{ $dayName }},
-                    {{ \Carbon\Carbon::parse($subject->jam_mulai)->format('H:i') }} - 
-                    {{ \Carbon\Carbon::parse($subject->jam_selesai)->format('H:i') }}
-                </span>
+                                        @php
+                                            $days = [
+                                                1 => 'Senin',
+                                                2 => 'Selasa',
+                                                3 => 'Rabu',
+                                                4 => 'Kamis',
+                                                5 => 'Jumat',
+                                                6 => 'Sabtu',
+                                                7 => 'Minggu',
+                                            ];
+                                            $dayName = $days[$subject->hari] ?? 'Unknown';
+                                        @endphp
+                                        <span class="fw-semibold d-block mb-3">
+                                            {{ $dayName }},
+                                            {{ \Carbon\Carbon::parse($subject->jam_mulai)->format('H:i') }} - 
+                                            {{ \Carbon\Carbon::parse($subject->jam_selesai)->format('H:i') }}
+                                        </span>
 
-                @php
-                    // Ambil data kelas berdasarkan my_class_id yang terkait dengan subject
-                    $myClass = \App\Models\MyClass::find($subject->my_class_id);
-                @endphp
-                <p class="mb-3">{{ $myClass ? $myClass->name : 'Kelas Tidak Ditemukan' }}</p>
+                                        @php
+                                            // Ambil data kelas berdasarkan my_class_id yang terkait dengan subject
+                                            $myClass = \App\Models\MyClass::find($subject->my_class_id);
+                                        @endphp
+                                        <p class="mb-3">{{ $myClass ? $myClass->name : 'Kelas Tidak Ditemukan' }}</p>
 
-                <!-- Link untuk mengakses siswa dalam kelas yang diajar oleh guru yang login -->
-                <a href="{{ route('teacher.schedule') }}" class="btn btn-sm btn-info" style="position: absolute; bottom: 16px; right: 16px;">
-                    Akses Jadwal
-                </a>
-                
-            </div>
-        </div>
-    </div>
-@endforeach
+                                        <!-- Link untuk mengakses siswa dalam kelas yang diajar oleh guru yang login -->
+                                        <a href="{{ route('teacher.schedule') }}" class="btn btn-sm btn-info" style="position: absolute; bottom: 16px; right: 16px;">
+                                            Akses Jadwal
+                                        </a>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
 
                     </div>
                 </div>

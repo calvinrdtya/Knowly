@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SupportTeam;
 
+use DB;
 use Carbon\Carbon;
 use App\Helpers\Qs;
 use App\Helpers\Mk;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Subject;
 use App\Models\StudentRecord;
+use App\Models\MyClass;
 
 class StudentRecordController extends Controller
 {
@@ -234,5 +236,28 @@ class StudentRecordController extends Controller
 
         return back()->with('flash_success', __('msg.del_ok'));
     }
+    public function schedule()
+    {
+        // Ambil user yang sedang login
+        $user = Auth::user();
 
+        // Pastikan user adalah student dan memiliki my_class_id
+        if ($user->user_type !== 'student' || is_null($user->my_class_id)) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses ke jadwal ini.');
+        }
+
+        // Ambil data kelas (my_class) berdasarkan my_class_id user
+        $my_class = MyClass::find($user->my_class_id);
+
+        // Pastikan kelas ditemukan
+        if (!$my_class) {
+            return redirect()->back()->with('error', 'Kelas tidak ditemukan.');
+        }
+
+        // Ambil data subject berdasarkan my_class_id
+        $subjects = Subject::where('my_class_id', $my_class->id)->get();
+
+        // Kirimkan data ke view
+        return view('student.schedule.index', compact('subjects', 'my_class'));
+    }
 }
