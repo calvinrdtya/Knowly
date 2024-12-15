@@ -30,7 +30,7 @@ class SubjectController extends Controller
         $d['teachers'] = $this->user->getUserByType('teacher');
         $d['subjects'] = $this->my_class->getAllSubjects();
 
-        // return view('pages.support_team.subjects.index', $d);
+        return view('pages.support_team.subjects.index', $d);
         return view('back.pages.mata_pelajaran.index', $d);
     }
     public function store(SubjectCreate $req)
@@ -46,6 +46,21 @@ class SubjectController extends Controller
             // Mengembalikan error jika gagal
             return redirect()->back()->with('error', 'Mata Pelajaran Gagal Ditambahkan. Kesalahan: ' . $e->getMessage());
         }
+        // $data = $req->all();
+        // $subject = $this->my_class->createSubject($data);
+
+        // // Buat entri Attendance secara otomatis
+        // Attendance::create([
+        //     'subject_id' => $subject->id, 
+        //     'student_id' => 1,
+        //     'class_id' => $data['my_class_id'],
+        //     'date' => now()->toDateString(), 
+        //     'is_open' => false, 
+        //     'is_online' => false,
+        //     'latitude' => null, 
+        //     'longitude' => null,
+        // ]);
+        // return Qs::jsonStoreOk();
     }
     public function edit($id)
     {
