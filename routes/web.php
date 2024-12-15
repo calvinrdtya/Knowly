@@ -3,6 +3,7 @@
 use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AssignmentSubmissionController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\QuizController;
 use App\Models\AssignmentSubmission;
@@ -240,3 +241,23 @@ Route::get('student/assignments/{assignment}/edit', [AssignmentSubmissionControl
 Route::put('student/assignments/{assignment}/update', [AssignmentSubmissionController::class, 'update'])->name('student.assignments.update');
 
 
+// jadwal admin
+
+Route::get('schedules', [JadwalController::class, 'index'])->name('jadwal.index');
+Route::get('schedules/create', [JadwalController::class, 'create'])->name('jadwal.create');
+Route::get('schedules/{jadwal}', [JadwalController::class, 'show'])->name('jadwal.show');
+Route::post('schedules', [JadwalController::class, 'store'])->name('jadwal.store');
+Route::get('schedules/{jadwal}/edit', [JadwalController::class, 'edit'])->name('jadwal.edit');
+Route::put('schedules/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.update');
+Route::delete('schedules/{jadwal}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
+Route::get('get-subjects/{class_id}', [JadwalController::class, 'getSubjectsByClass']);
+Route::get('get-teacher/{subject_id}', [JadwalController::class, 'getTeachersBySubject']);
+
+
+//jadwal siswa
+Route::get('student/schedules', [JadwalController::class, 'studentSchedules'])->name('student.schedules.index');
+Route::get('student/schedules/{jadwal}', [JadwalController::class, 'studentShow'])->name('student.schedules.show');
+
+//jadwal guru
+Route::get('teacher/schedules', [JadwalController::class, 'teacherSchedules'])->name('teacher.schedules.index');
+Route::get('teacher/schedules/{jadwal}', [JadwalController::class, 'teacherShow'])->name('teacher.schedules.show');
