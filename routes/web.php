@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\AssignmentController;
+use App\Http\Controllers\AssignmentSubmissionController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\SupportTeam\SubjectController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
+use App\Http\Controllers\QuizController;
+use App\Models\AssignmentSubmission;
 use App\User;
 
 Auth::routes();
@@ -222,4 +226,35 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
     Route::post('/meeting/leave/{id}', [MeetingController::class, 'leaveMeeting'])->name('meeting.leave');
     Route::post('/meeting/end/{id}', [MeetingController::class, 'endMeeting'])->name('meeting.end');
+
+
+Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+Route::get('/quiz/create', [QuizController::class, 'create'])->name('quiz.create');
+Route::post('/quiz/store', [QuizController::class, 'store'])->name('quiz.store');
 });
+
+Route::get('assignments', [AssignmentController::class, 'index'])->name('assignments.index');
+Route::post('assignments', [AssignmentController::class, 'store'])->name('assignments.store');
+
+Route::get('assignments/show/{assignment}', [AssignmentController::class, 'show'])->name('assignments.show');
+Route::get('assignments/submissions/{assignment}', [AssignmentController::class, 'submissions'])->name('assignments.submissions');
+
+
+Route::get('/get-subjects-by-class', [AssignmentController::class, 'getSubjectsByClass']);
+Route::put('assignments/{assignment}/update', [AssignmentController::class, 'update'])->name('assignments.update');
+Route::delete('assignments/{assignment}', [AssignmentController::class, 'destroy'])->name('assignments.destroy');
+Route::get('assignments/create', [AssignmentController::class, 'create'])->name('assignments.create');
+Route::post('assignments/{assignment}/submit', [AssignmentController::class, 'submit'])->name('assignments.submit');
+
+Route::get('assignments/{assignment}/edit', [AssignmentController::class, 'edit'])->name('assignments.edit');
+
+Route::get('student/assignments', [AssignmentSubmissionController::class, 'index'])->name('student.assignments.index');
+Route::get('student/assignments/{assignment}', [AssignmentSubmissionController::class, 'show'])->name('student.assignments.show');
+Route::post('student/assignments/{assignment}/submit', [AssignmentSubmissionController::class, 'submit'])->name('student.assignments.submit');
+
+Route::get('student/assignments/{assignment}/edit', [AssignmentSubmissionController::class, 'edit'])->name('student.assignments.edit');
+Route::put('student/assignments/{assignment}/update', [AssignmentSubmissionController::class, 'update'])->name('student.assignments.update');
+
+

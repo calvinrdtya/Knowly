@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\UserType;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Models\Attendance;
 
 class SubjectController extends Controller
 {
@@ -18,8 +19,8 @@ class SubjectController extends Controller
 
     public function __construct(MyClassRepo $my_class, UserRepo $user)
     {
-        $this->middleware('teamSA', ['except' => ['destroy',] ]);
-        $this->middleware('super_admin', ['only' => ['destroy',] ]);
+        $this->middleware('teamSA', ['except' => ['destroy',]]);
+        $this->middleware('super_admin', ['only' => ['destroy',]]);
 
         $this->my_class = $my_class;
         $this->user = $user;
@@ -39,6 +40,8 @@ class SubjectController extends Controller
 
         // Return data ke view
         return view('back.pages.mata_pelajaran.index', $d);
+
+        return view('pages.support_team.subjects.index', $d);
     }
 
     // public function index()
@@ -118,6 +121,4 @@ class SubjectController extends Controller
         $this->my_class->deleteSubject($id);
         return back()->with('flash_success', __('msg.del_ok'));
     }
-    
-    
 }
