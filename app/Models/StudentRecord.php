@@ -46,5 +46,11 @@ class StudentRecord extends Eloquent
     public function meetings() {
         return $this->belongsToMany(Meeting::class, 'meeting_user');
     }
+
+    
+
+    public function assignments() {
+        return $this->hasMany(AssignmentSubmission::class, 'student_id');
+    }
     
 }

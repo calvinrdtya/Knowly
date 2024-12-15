@@ -21,7 +21,7 @@
         <h2>Buka Presensi - {{ $subject->name }}</h2>
         
             
-            @if ($attendance==null)
+            @if (!$attendance)
             <form action="{{ route('attendance.open', $subject->id) }}" method="POST">
             @csrf
             <div class="form-group">
@@ -52,5 +52,6 @@
             document.getElementById('latitude').value = position.coords.latitude;
             document.getElementById('longitude').value = position.coords.longitude;
         });
+
     </script>
 @endsection

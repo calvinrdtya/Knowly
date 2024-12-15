@@ -30,6 +30,8 @@
                 <button type="submit" class="btn btn-primary" id="attendance-btn" disabled>Presensi</button>
                 <p>Presensi belum dibuka.</p>
             @elseif (!$attendance->is_open)
+            <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
                 <button type="submit" class="btn btn-primary" id="attendance-btn" disabled>Presensi</button>
             @elseif (!$attendance->is_online)
                 <input type="hidden" name="latitude" id="latitude">
@@ -74,5 +76,6 @@
             document.getElementById('latitude').value = position.coords.latitude;
             document.getElementById('longitude').value = position.coords.longitude;
         });
+        
     </script>
 @endsection
