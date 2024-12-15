@@ -29,12 +29,19 @@ class QuizController extends Controller
     }
     public function create()
     {
+        if (auth()->user()->role !== 'teacher') {
+            return redirect()->route('quizzes.index')->with('error', 'Ups kamu tidak dapat membuat kuis.');
+        }
+
         return view('pages.quizzes.create');
     }
 
     // Menyimpan kuis beserta pertanyaan dan jawabannya
     public function store(Request $request)
     {
+        if (auth()->user()->role !== 'teacher') {
+            return redirect()->route('quizzes.index')->with('error', 'Ups kamu tidak dapat membuat kuis.');
+        }
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
