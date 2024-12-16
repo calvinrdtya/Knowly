@@ -113,14 +113,14 @@
         <div data-i18n="Account Settings">Tugas</div>
       </a>
     </li>
-    <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+    <li class="menu-item {{ request()->routeIs('quizzes.index') ? 'active open' : '' }}">
+      <a href="#" class="menu-link menu-toggle">
         <i class="menu-icon bx bx-edit-alt"></i>
         <div data-i18n="Layouts">Ujian Online</div>
       </a>
       <ul class="menu-sub">
-        <li class="menu-item">
-          <a href="layouts-without-menu.html" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('quizzes.index') ? 'active' : '' }}">
+          <a href="{{ route('quizzes.index') }}" class="menu-link">
             <div data-i18n="Without menu">Kuis</div>
           </a>
         </li>

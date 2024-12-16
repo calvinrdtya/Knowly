@@ -78,16 +78,21 @@
 
     <!-- Layouts -->
     <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <a href="#" class="menu-link menu-toggle">
         <i class="menu-icon bx bx-calendar"></i>
         <div data-i18n="Layouts">Akademik</div>
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
-          <a href="layouts-without-menu.html" class="menu-link">
+          <a href="" class="menu-link">
             <div data-i18n="Without menu">Kalender</div>
           </a>
         </li>
+        {{-- <li class="menu-item {{ request()->routeIs('kalender.index') ? 'active' : '' }}">
+          <a href="{{ route('kalender.index') }}" class="menu-link">
+            <div data-i18n="Without menu">Kalender</div>
+          </a>
+        </li> --}}
       </ul>
     </li>
     <li class="menu-header small text-uppercase">
@@ -105,20 +110,20 @@
         <div data-i18n="Account Settings">Tugas</div>
       </a>
     </li>
-    <li class="menu-item">
-      <a href="{{ route('assignments.index') }}" class="menu-link">
+    <li class="menu-item {{ request()->routeIs('teacher.schedules.index', 'teacher.schedules.show') ? 'active' : '' }}">
+      <a href="{{ route('teacher.schedules.index') }}" class="menu-link">
         <i class="menu-icon bx bx-calendar-event"></i>
         <div data-i18n="Account Settings">Jadwal</div>
       </a>
     </li>
-    <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+    <li class="menu-item {{ request()->routeIs('quiz.create') ? 'active open' : '' }}">
+      <a href="" class="menu-link menu-toggle">
         <i class="menu-icon bx bx-edit-alt"></i>
         <div data-i18n="Layouts">Ujian Online</div>
       </a>
       <ul class="menu-sub">
-        <li class="menu-item">
-          <a href="{{ route('quizzes.index') }}" class="menu-link">
+        <li class="menu-item {{ request()->routeIs('quiz.create') ? 'active' : '' }}">
+          <a href="{{ route('quiz.create') }}" class="menu-link">
             <div data-i18n="Without menu">Kuis</div>
           </a>
         </li>

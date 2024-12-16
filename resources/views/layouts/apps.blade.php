@@ -60,6 +60,9 @@
     <script src="{{ asset('all/assets/js/main.js') }}"></script>
     <script src="{{ asset('all/assets/js/dashboards-analytics.js') }}"></script>
 
+    <script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/demo_pages/fullcalendar_basic.js') }}"></script>
+
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>

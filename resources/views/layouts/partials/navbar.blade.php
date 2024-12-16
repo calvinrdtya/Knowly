@@ -17,9 +17,6 @@
                     <ul class="nav">
                         <li class="scroll-to-section">
                             <a href="{{ url('/') }}" class="{{ request()->is('/') ? 'active' : '' }}">Home</a>
-                        </li>                          
-                        <li class="scroll-to-section">
-                            <a href="">About</a>
                         </li>
                         <li class="scroll-to-section">
                             <a href="{{ route('login') }}" class="{{ request()->routeIs('login') ? 'active' : '' }}">Login | Daftar</a>

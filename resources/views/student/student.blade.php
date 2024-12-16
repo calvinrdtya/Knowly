@@ -175,22 +175,22 @@
                                     <div class="card card-hov border-1 mb-3" style="height: auto; position: relative;">
                                         <div class="card-body p-3">
                                             <div class="card-title">
-                                                <h5 class="card-title text-dark mb-1">Formulir Kelulusan PENS 2024</h5>
+                                                <h5 class="card-title text-dark mb-1">Formulir Kelulusan tahun 2024</h5>
                                                 <p class="mb-4" id="deskripsi">
-                                                    Daftar Nama Kelulusan PENS Maret 2024    
+                                                    Daftar Nama siswa/siswi yang lulus bulan Maret 2024    
                                                 </p>
                                             </div>
                                             <div class="mt-3">
                                                 <p class="mb-0">Dibuat Oleh BK</p>
-                                                <p class="mb-2">Sabtu, 14 Desember 2024 - 10:53</p>
+                                                <p class="mb-3">Sabtu, 14 Desember 2024 - 10:53</p>
                                             </div>
                                             <a href="#" class="text-decoration-none text-reset">
                                                 <div class="card border-1 shadow-none">
                                                     <div class="d-flex align-items-center justify-content-between p-2">
                                                         <img src="{{ asset('home/assets/images/docs/pdf.png') }}" alt="User" width="50" class="rounded me-3" />
                                                         <div class="flex-grow-1 text-start">
-                                                            <p class="mb-0">Dibuat Oleh BK</p>
-                                                            <p class="mb-0">Sabtu, 14 Desember 2024 - 10:53</p>
+                                                            <p class="mb-0">Formulir kelulusan</p>
+                                                            <p class="mb-0">pdf</p>
                                                         </div>
                                                         <i class='bx bx-download' style="font-size: 24px; cursor: pointer;"></i>
                                                     </div>

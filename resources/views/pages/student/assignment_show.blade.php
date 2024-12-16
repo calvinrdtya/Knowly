@@ -56,9 +56,9 @@
                         class="form-control" 
                         {{ $isSubmitted && !$isEditing ? 'disabled' : '' }}
                     >
-                    @if ($isSubmitted && $submission->file)
+                    @if ($isSubmitted && $submission->file_path)
                         <p class="mt-2">Lampiran saat ini: 
-                            <a href="{{ asset('storage/' . $submission->file) }}" target="_blank">Download</a>
+                            <a href="{{ asset($submission->file) }}" target="_blank">Download</a>
                         </p>
                     @endif
                 </div>

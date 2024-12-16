@@ -1,6 +1,6 @@
-## **Laravel School Management System** 
+## **Knowly - Knowledge Network for Online Web-based Learning and Yield** 
 
-**LAVSMS** is developed for educational institutions like schools and colleges built on Laravel 8
+
 
 **SCREENSHOTS** 
 
@@ -10,29 +10,26 @@
 **Login**
 <img src="https://i.ibb.co/Rh1Bfwk/login.png" alt="login" border="0">
 
-**Student Marksheet**
+**Presensi**
 <img src="https://i.ibb.co/GCgv5ZR/marksheet.png" alt="marksheet" border="0">
 
-**System Settings**
+**Buka Presensi**
 <img src="https://i.ibb.co/Kmrhw69/system-settings.png" alt="system-settings" border="0">
 
-**Print Marksheet**
+**Upload Tugas**
 <div style="clear: both"> </div>
 <img src="https://i.ibb.co/5c1GHCj/capture-20210530-115521-crop.png" alt="print-marksheet">
 
-**Print Tabulation Sheet & Marksheet**
+**Submit Tugas**
 <img src="https://i.ibb.co/QmscPfn/capture-20210530-115802.png" alt="tabulation-sheet" border="0">
 
 <hr />  
 
-There are 7 types of user accounts. They include:
+There are 3 types of user accounts. They include:
  
 Administrators (Super Admin & Admin)
-- Librarian
-- Accountant
 - Teacher
 - Student
-- Parent
 
 **Requirements** 
 
@@ -97,13 +94,6 @@ After seeding. Login details as follows:
 - View noticeboard and school events in calendar
 - Manage own profile
 
-**-- PARENT**
-- View teacher profile
-- View own child's marksheet (Download/Print PDF)
-- View own child's Timetable
-- View own child's payments
-- View noticeboard and school events in calendar
-- Manage own profile
 
 ### **Contributing**
 

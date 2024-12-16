@@ -212,10 +212,6 @@
                         </div>
                     </div> 
                 </div>
-                <!-- Footer -->
-                @include('teacher.layouts.footer')  
-                <!-- / Footer -->
-        
                 <div class="content-backdrop fade"></div>
                 </div>
                 <!-- Content wrapper -->

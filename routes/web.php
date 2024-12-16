@@ -4,9 +4,11 @@ use App\Http\Controllers\AssignmentController;
 use App\Http\Controllers\AssignmentSubmissionController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\SupportTeam\SubjectController;
+use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\MeetingController;
 use App\Http\Controllers\SupportTeam\StudentRecordController;
 use App\Http\Controllers\QuizController;
+use App\Http\Controllers\HomeController;
 use App\Models\AssignmentSubmission;
 use App\User;
 
@@ -44,8 +46,6 @@ Route::group(['middleware' => 'auth'], function () {
             // Route::get('list/{class_id}', 'StudentRecordController@listByClass')->name('students.list')->middleware('teamSAT');
 
            
- 
-
             /* Promotions */
             Route::post('promote_selector', 'PromotionController@selector')->name('students.promote_selector');
             Route::get('promotion/manage', 'PromotionController@manage')->name('students.promotion_manage');
@@ -231,11 +231,14 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
     Route::post('/meeting/end/{id}', [MeetingController::class, 'endMeeting'])->name('meeting.end');
 
-    Route::get('/quizzes', [QuizController::class, 'index'])->name('quizzes.index');
-    Route::get('/quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
-    Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
-    Route::get('/quiz/create', [QuizController::class, 'create'])->name('quiz.create');
-    Route::post('/quiz/store', [QuizController::class, 'store'])->name('quiz.store');
+    // Student
+    Route::get('quizzes', [QuizController::class, 'index'])->name('quizzes.index');
+    Route::get('quizzes/{quiz}', [QuizController::class, 'show'])->name('quizzes.show');
+    Route::post('quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+
+    // Teacher
+    Route::get('quiz/create', [QuizController::class, 'create'])->name('quiz.create');
+    Route::post('quiz/store', [QuizController::class, 'store'])->name('quiz.store');
 });
 
 Route::get('assignments', [AssignmentController::class, 'index'])->name('assignments.index');
@@ -264,4 +267,23 @@ Route::post('student/assignments/{assignment}/submit', [AssignmentSubmissionCont
 Route::get('student/assignments/{assignment}/edit', [AssignmentSubmissionController::class, 'edit'])->name('student.assignments.edit');
 Route::put('student/assignments/{assignment}/update', [AssignmentSubmissionController::class, 'update'])->name('student.assignments.update');
 
+Route::get('kalender', [HomeController::class, 'kalender'])->name('kalender.index');
 
+// jadwal admin
+Route::get('schedules', [JadwalController::class, 'index'])->name('jadwal.index');
+Route::get('schedules/create', [JadwalController::class, 'create'])->name('jadwal.create');
+Route::get('schedules/{jadwal}', [JadwalController::class, 'show'])->name('jadwal.show');
+Route::post('schedules', [JadwalController::class, 'store'])->name('jadwal.store');
+Route::get('schedules/{jadwal}/edit', [JadwalController::class, 'edit'])->name('jadwal.edit');
+Route::put('schedules/{jadwal}', [JadwalController::class, 'update'])->name('jadwal.update');
+Route::delete('schedules/{jadwal}', [JadwalController::class, 'destroy'])->name('jadwal.destroy');
+Route::get('get-subjects/{class_id}', [JadwalController::class, 'getSubjectsByClass']);
+Route::get('get-teacher/{subject_id}', [JadwalController::class, 'getTeachersBySubject']);
+
+//jadwal siswa
+Route::get('student/schedules', [JadwalController::class, 'studentSchedules'])->name('student.schedules.index');
+Route::get('student/schedules/{jadwal}', [JadwalController::class, 'studentShow'])->name('student.schedules.show');
+
+//jadwal guru
+Route::get('teacher/schedules', [JadwalController::class, 'teacherSchedules'])->name('teacher.schedules.index');
+Route::get('teacher/schedules/{jadwal}', [JadwalController::class, 'teacherShow'])->name('teacher.schedules.show');

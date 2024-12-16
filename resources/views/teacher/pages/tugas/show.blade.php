@@ -112,7 +112,7 @@
                                         </div>
                                         <div class="table-responsive text-nowrap">
                                             @if($students->isEmpty())
-                                                <p>Data Siswa Tidak Ada</p>
+                                                <p>Belum ada siswa yang mengumpulkan</p>
                                             @else
                                                 <table class="table table-hover">
                                                     <thead>

@@ -51,18 +51,31 @@ class AssignmentSubmissionController extends Controller
     // Menyimpan pengumpulan tugas
     public function submit(Request $request, $assignmentId)
     {
+        $student = StudentRecord::where('user_id', auth()->id())->firstOrFail();
         $validated = $request->validate([
             'notes' => 'required|string',
-            'file' => 'nullable|file|max:2048',
+            'file' => 'nullable|file|max:2048|mimes:pdf,docx,txt', 
+        ], [
+            'file.max' => 'File tidak boleh lebih dari 2MB.',
+            'file.mimes' => 'Format file harus PDF, DOCX, atau TXT.',
+            'notes.required' => 'Catatan harus diisi.',
         ]);
 
-        $filePath = $request->file('file') ? $request->file('file')->store('submissions', 'public') : null;
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $nama = $file->getClientOriginalName();
+            $path = $file->storeAs('submissions', $nama);
+            $filePath = 'storage/' . $path;
+        } else {
+            $filePath = null;
+        }
+
 
         AssignmentSubmission::create([
             'assignment_id' => $assignmentId,
-            'student_id' => auth()->id(),
+            'student_id' => $student->user_id,
             'notes' => $validated['notes'],
-            'file' => $filePath,
+            'file_path' => $filePath,
         ]);
 
         return redirect()->route('student.assignments.show', $assignmentId)->with('success', 'Tugas berhasil dikumpulkan.');
@@ -75,12 +88,18 @@ class AssignmentSubmissionController extends Controller
             'file' => 'nullable|file|mimes:pdf,docx,txt|max:2048',
         ]);
 
-
         $submission = AssignmentSubmission::where('id', $id)->where('student_id', auth()->id())->firstOrFail();
-                
+        
+        if ($submission->student_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki izin untuk mengedit tugas ini.');
+        }
+
+        $path = $request->file('file') ? $request->file('file')->store('submissions', 'public') : null;
+        dd($path);
+
         $submission->update([
             'notes' => $request->notes,
-            'file_path' => $request->file ? $request->file->store('submissions') : $submission->file_path,
+            'file_path' => $path
         ]);
 
         return redirect()->back()->with('success', 'Tugas berhasil diperbarui.');
@@ -102,5 +121,4 @@ class AssignmentSubmissionController extends Controller
             'isEditing' => true,
         ]);
     }
-
 }

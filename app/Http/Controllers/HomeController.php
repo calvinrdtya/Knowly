@@ -15,7 +15,6 @@ class HomeController extends Controller
     {
         $this->user = $user;
     }
-
     public function index()
     {
         if (Auth::check()) {
@@ -24,7 +23,6 @@ class HomeController extends Controller
             return view('home');
         }
     }
-
     public function privacy_policy()
     {
         $data['app_name'] = config('app.name');
@@ -32,7 +30,6 @@ class HomeController extends Controller
         $data['contact_phone'] = Qs::getSetting('phone');
         return view('pages.other.privacy_policy', $data);
     }
-
     public function terms_of_use()
     {
         $data['app_name'] = config('app.name');
@@ -40,21 +37,14 @@ class HomeController extends Controller
         $data['contact_phone'] = Qs::getSetting('phone');
         return view('pages.other.terms_of_use', $data);
     }
-
     public function dashboard()
     {
         $userType = auth()->user()->user_type;
-
-        // Ambil my_class_id pengguna yang login
         $myClassId = auth()->user()->my_class_id;
-
-        // Ambil ID pengguna (guru) yang sedang login
         $userId = auth()->user()->id;
 
-        // Ambil data assignments yang memiliki class_id sama dengan pengguna yang login
         $assignments = Assignment::where('class_id', $myClassId)->get();
 
-        // Ambil data subject yang memiliki teacher_id sama dengan id teacher yang login
         $subjects = Subject::where('teacher_id', $userId)->get();
 
         switch ($userType) {
@@ -63,10 +53,8 @@ class HomeController extends Controller
             case 'admin':
                 return view('back.dashboard');
             case 'teacher':
-                // Kirim data assignments dan subjects ke view teacher
                 return view('teacher.teacher', ['assignments' => $assignments, 'subjects' => $subjects]);
             case 'student':
-                // Kirim data assignments ke view student
                 return view('student.student', ['assignments' => $assignments]);
             case 'accountant':
                 return view('back.dashboard');
@@ -75,18 +63,8 @@ class HomeController extends Controller
         }
     }
 
-
-
-
-
-    // public function dashboard()
-    // {
-    //     $d=[];
-    //     if(Qs::userIsTeamSAT()){
-    //         $d['users'] = $this->user->getAll();
-    //     }
-
-    //     return view('pages.support_team.dashboard', $d);
-    //     // return view('back.dashboard', $d);
-    // }
+    public function kalender()
+    {
+        return view('kalender');
+    }
 }

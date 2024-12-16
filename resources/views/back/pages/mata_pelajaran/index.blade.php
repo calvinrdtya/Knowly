@@ -105,7 +105,7 @@
                                                                     <label for="teacher_id" class="col-form-label col-md-3">Pilih Guru<span class="text-danger">*</span></label>
                                                                     <div class="col-md-9">
                                                                         <select class="form-select" id="teacher_id" name="teacher_id" required>
-                                                                            <option value="">-- Pilih Guru --</option>
+                                                                            <option value="">Pilih Guru</option>
                                                                             @foreach($teachers as $teacher)
                                                                                 <option value="{{ $teacher->id }}">{{ $teacher->name }}</option>
                                                                             @endforeach

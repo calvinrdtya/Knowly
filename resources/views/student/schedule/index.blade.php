@@ -32,7 +32,7 @@
                                         <label for="hari" class="col-md-3 col-form-label">Tahun Ajaran<span class="text-danger">*</span></label>
                                         <div class="col-md-6">
                                             <select class="form-select" id="hari" name="hari" aria-label="Default select example" required>
-                                                <option selected>Tahun Ajaran</option>
+                                                {{-- <option selected>Tahun Ajaran</option> --}}
                                                 <option value="1">2024/2025</option>
                                             </select>
                                             @error('hari')
@@ -46,8 +46,8 @@
                                         <label for="hari" class="col-md-2 col-form-label">Semester<span class="text-danger">*</span></label>
                                         <div class="col-md-6">
                                             <select class="form-select" id="hari" name="hari" aria-label="Default select example" required>
-                                                <option selected>Semester</option>
-                                                <option value="1">Ganjil</option>
+                                                {{-- <option selected>Semester</option>
+                                                <option value="1">Ganjil</option> --}}
                                                 <option value="1">Genap</option>
                                             </select>
                                             @error('hari')

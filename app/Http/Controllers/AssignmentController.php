@@ -27,7 +27,7 @@ class AssignmentController extends Controller
         $subjects = Subject::where('teacher_id', $teacher_id)->get();
 
         $isTeacher = auth()->user()->user_type;
-        if($isTeacher!=='teacher') {
+        if ($isTeacher !== 'teacher') {
             return redirect()->route('dashboard');
         }
         $assignments = Assignment::where('teacher_id', auth()->user()->id)->get();
@@ -55,24 +55,20 @@ class AssignmentController extends Controller
     {
         $classId = $request->class_id;
 
-        // Validasi input
         if (!$classId) {
             return response()->json(['error' => 'ID kelas tidak valid.'], 400);
         }
 
-        // Ambil data mata pelajaran yang sesuai dengan kelas yang dipilih
         $subjects = Subject::whereHas('my_class', function ($query) use ($classId) {
             $query->where('id', $classId);
         })->where('teacher_id', auth()->user()->id)->get();
 
-        // Kembalikan data dalam format JSON
         return response()->json($subjects);
     }
 
     // Menyimpan tugas baru
     public function store(Request $request)
     {
-        // dd($request->all());
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -92,7 +88,6 @@ class AssignmentController extends Controller
     public function edit($id)
     {
         $assignment = Assignment::findOrFail($id)->where('teacher_id', auth()->user()->id)->first();
-    
         $classes = MyClass::whereHas('subjects', function ($query) {
             $query->where('teacher_id', auth()->user()->id);
         })->get();
@@ -153,6 +148,9 @@ class AssignmentController extends Controller
             ->where('assignment_id', $assignmentId)
             ->join('student_records', 'assignment_submissions.student_id', '=', 'student_records.id')
             ->get();
+
+        // Ambil data submission yang sudah dikumpulkan
+        $submissions = AssignmentSubmission::with('student')->where('assignment_id', $assignmentId)->get();
 
         return view('pages.teacher.assignment_submissions', [
             'assignment' => $assignment,
@@ -228,12 +226,11 @@ class AssignmentController extends Controller
             'assignment' => $assignment,
             'submission' => $submission,
             'isSubmitted' => $isSubmitted,
-            'isEditing' => $isEditing
+            'isEditing' => $isEditing,
         ];
 
         // Tampilkan view assignment show
         return view('teacher.pages.tugas.show', $data);
+        // return view('pages.teacher.assignment_submissions', $data);
     }
-
-    
 }
