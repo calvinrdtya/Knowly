@@ -25,13 +25,7 @@
                 {{ \Carbon\Carbon::parse($assignment->due_date)->format('d M Y, H:i') }}
             </p>
 
-            <form 
-                action="{{ $isSubmitted ? route('student.assignments.update', $submission->id) : route('student.assignments.submit', $assignment->id) }}" 
-                method="POST" 
-                enctype="multipart/form-data" 
-                class="needs-validation" 
-                novalidate
-            >
+            <form action="{{ $isSubmitted ? route('student.assignments.update', $submission->id) : route('student.assignments.submit', $assignment->id) }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 @csrf
                 @if ($isSubmitted)
                     @method('PUT')
@@ -62,9 +56,9 @@
                         class="form-control" 
                         {{ $isSubmitted && !$isEditing ? 'disabled' : '' }}
                     >
-                    @if ($isSubmitted && $submission->file)
+                    @if ($isSubmitted && $submission->file_path)
                         <p class="mt-2">Lampiran saat ini: 
-                            <a href="{{ asset('storage/' . $submission->file) }}" target="_blank">Download</a>
+                            <a href="{{ asset($submission->file) }}" target="_blank">Download</a>
                         </p>
                     @endif
                 </div>

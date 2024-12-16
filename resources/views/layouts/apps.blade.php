@@ -19,8 +19,33 @@
     <link rel="stylesheet" href="{{ asset('all/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}">
     <link rel="stylesheet" href="{{ asset('all/assets/vendor/libs/apex-charts/apex-charts.css') }}">
     <link rel="stylesheet" href="{{ asset('all/assets/vendor/css/pages/page-auth.css') }}">
+
     <script src="{{ asset('all/assets/vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('all/assets/js/config.js') }}"></script>
+
+    <style>
+    .card-menu {
+      transition: background-color 0.3s ease, transform 0.3s ease;
+      border-radius: 30px;   
+    }
+    .card-menu:hover {
+      background-color: #e9f9ff;
+      transform: scale(1.05);
+    }
+    .card-menu img {
+      transition: transform 0.3s ease;
+    }
+    .card-menu:hover img {
+      transform: scale(1.1);
+    }
+    .card-hov {
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+    }
+    .card-hov:hover {
+      box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1); 
+    }
+    </style>
   </head>
 <body>
 
@@ -34,6 +59,9 @@
     <script src="{{ asset('all/assets/vendor/libs/apex-charts/apexcharts.js') }}"></script>
     <script src="{{ asset('all/assets/js/main.js') }}"></script>
     <script src="{{ asset('all/assets/js/dashboards-analytics.js') }}"></script>
+
+    <script src="{{ asset('global_assets/js/plugins/ui/fullcalendar/fullcalendar.min.js') }}"></script>
+    <script src="{{ asset('global_assets/js/demo_pages/fullcalendar_basic.js') }}"></script>
 
     <script async defer src="https://buttons.github.io/buttons.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

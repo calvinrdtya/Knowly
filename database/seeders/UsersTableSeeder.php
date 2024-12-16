@@ -25,50 +25,52 @@ class UsersTableSeeder extends Seeder
 
     protected function createNewUsers()
     {
-        $password = Hash::make('cj'); // Default user password
+        $password = Hash::make('11111111');
 
         $d = [
 
-            ['name' => 'CJ Inspired',
-                'email' => 'cj@cj.com',
-                'username' => 'cj',
+            [
+                'name' => 'Knowly',
+                'email' => 'superadmin@gmail.com',
+                'username' => 'Knowly',
                 'password' => $password,
                 'user_type' => 'super_admin',
                 'code' => strtoupper(Str::random(10)),
                 'remember_token' => Str::random(10),
             ],
-
-            ['name' => 'Admin KORA',
-            'email' => 'admin@admin.com',
-            'password' => $password,
-            'user_type' => 'admin',
-            'username' => 'admin',
-            'code' => strtoupper(Str::random(10)),
-            'remember_token' => Str::random(10),
+            [
+                'name' => 'Admin',
+                'email' => 'admin@gmail.com',
+                'password' => $password,
+                'user_type' => 'admin',
+                'username' => 'admin',
+                'code' => strtoupper(Str::random(10)),
+                'remember_token' => Str::random(10),
             ],
-
-            ['name' => 'Teacher Chike',
-                'email' => 'teacher@teacher.com',
+            [
+                'name' => 'Guru  1',
+                'email' => 'guru@gmail.com',
                 'user_type' => 'teacher',
-                'username' => 'teacher',
+                'username' => 'Guru 1',
                 'password' => $password,
                 'code' => strtoupper(Str::random(10)),
                 'remember_token' => Str::random(10),
             ],
-
-            ['name' => 'Parent Kaba',
-                'email' => 'parent@parent.com',
+            [
+                'name' => 'Ortu',
+                'email' => 'ortu@gmail.com',
                 'user_type' => 'parent',
-                'username' => 'parent',
+                'username' => 'ortu',
                 'password' => $password,
                 'code' => strtoupper(Str::random(10)),
                 'remember_token' => Str::random(10),
             ],
 
-            ['name' => 'Accountant Jeff',
-                'email' => 'accountant@accountant.com',
+            [
+                'name' => 'keuangan',
+                'email' => 'keuangan@gmail.com',
                 'user_type' => 'accountant',
-                'username' => 'accountant',
+                'username' => 'keuangan',
                 'password' => $password,
                 'code' => strtoupper(Str::random(10)),
                 'remember_token' => Str::random(10),

@@ -8,6 +8,9 @@ use App\Http\Requests\Subject\SubjectUpdate;
 use App\Repositories\MyClassRepo;
 use App\Repositories\UserRepo;
 use App\Http\Controllers\Controller;
+use App\Models\UserType;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Http\Request;
 use App\Models\Attendance;
 
 class SubjectController extends Controller
@@ -22,22 +25,39 @@ class SubjectController extends Controller
         $this->my_class = $my_class;
         $this->user = $user;
     }
-
     public function index()
     {
-        // $teachers = UserType::where('user_type', 'teacher')->get();
+        // Mengambil semua kelas
         $d['my_classes'] = $this->my_class->all();
-        $d['teachers'] = $this->user->getUserByType('teacher');
+        $d['teachers'] = DB::table('users')->where('user_type', 'teacher')->get();
+        // $d['classes'] = DB::table('my_classes')->get();
+
+        // Mengambil user dengan tipe 'teacher'
+        // $d['teachers'] = DB::table('users')->where('user_type', 'teacher')->get();
+
+        // Mengambil semua mata pelajaran
         $d['subjects'] = $this->my_class->getAllSubjects();
 
         return view('pages.support_team.subjects.index', $d);
         return view('back.pages.mata_pelajaran.index', $d);
     }
-    public function store(SubjectCreate $req)
+
+    // public function index()
+    // {
+    //     $d['my_classes'] = $this->my_class->all();
+    //     $d['teachers'] = $this->user->getUserByType('teacher');
+    //     $d['subjects'] = $this->my_class->getAllSubjects();
+        
+    //     return view('back.pages.mata_pelajaran.index', $d);
+    // }
+    // $teachers = UserType::where('user_type', 'teacher')->get();
+    // return view('pages.support_team.subjects.index', $d);
+
+    public function store(Request $request)
     {
         try {
             // Menyimpan data subject
-            $data = $req->all();
+            $data = $request->all();
             $this->my_class->createSubject($data);
 
             // Mengembalikan response sukses
@@ -46,22 +66,48 @@ class SubjectController extends Controller
             // Mengembalikan error jika gagal
             return redirect()->back()->with('error', 'Mata Pelajaran Gagal Ditambahkan. Kesalahan: ' . $e->getMessage());
         }
-        // $data = $req->all();
-        // $subject = $this->my_class->createSubject($data);
-
-        // // Buat entri Attendance secara otomatis
-        // Attendance::create([
-        //     'subject_id' => $subject->id, 
-        //     'student_id' => 1,
-        //     'class_id' => $data['my_class_id'],
-        //     'date' => now()->toDateString(), 
-        //     'is_open' => false, 
-        //     'is_online' => false,
-        //     'latitude' => null, 
-        //     'longitude' => null,
-        // ]);
-        // return Qs::jsonStoreOk();
+        
+        $request->validate([
+            'name' => 'required|string|max:100',
+            'slug' => 'required|string|max:100|unique:subjects,slug',
+            'my_class_id' => 'required|exists:my_classes,id',
+            'teacher_id' => 'required|exists:users,id',
+            'hari' => 'required|integer|min:1|max:7',
+            'jam_mulai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
+        ]);
+    
+        // Simpan data mata pelajaran
+        DB::table('subjects')->insert([
+            'name' => $request->name,
+            'slug' => $request->slug,
+            'my_class_id' => $request->my_class_id,
+            'teacher_id' => $request->teacher_id,
+            'hari' => $request->hari,
+            'jam_mulai' => $request->jam_mulai,
+            'jam_selesai' => $request->jam_selesai,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    
+        return redirect()->back()->with('success', 'Mata pelajaran berhasil ditambahkan!');
     }
+
+
+    // public function store(SubjectCreate $req)
+    // {
+    //     try {
+    //         // Menyimpan data subject
+    //         $data = $req->all();
+    //         $this->my_class->createSubject($data);
+
+    //         // Mengembalikan response sukses
+    //         return redirect()->route('mapel.index')->with('success', 'Mata Pelajaran Berhasil Ditambahkan.');
+    //     } catch (\Exception $e) {
+    //         // Mengembalikan error jika gagal
+    //         return redirect()->back()->with('error', 'Mata Pelajaran Gagal Ditambahkan. Kesalahan: ' . $e->getMessage());
+    //     }
+    // }
     public function edit($id)
     {
         $d['s'] = $sub = $this->my_class->findSubject($id);

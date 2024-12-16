@@ -55,7 +55,9 @@
           </g>
         </svg> --}}
       </span>
-      <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+      <span class="app-brand-text demo menu-text fw-bolder ms-2">
+        <img src="{{ asset('home/assets/images/logo.png') }}" alt="" style="width: 7% !important">
+      </span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -76,92 +78,65 @@
 
     <!-- Layouts -->
     <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <a href="#" class="menu-link menu-toggle">
         <i class="menu-icon bx bx-calendar"></i>
         <div data-i18n="Layouts">Akademik</div>
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
-          <a href="layouts-without-menu.html" class="menu-link">
-            <div data-i18n="Without menu">Timetables</div>
+          <a href="" class="menu-link">
+            <div data-i18n="Without menu">Kalender</div>
           </a>
         </li>
-      </ul>
-    </li>
-    <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class="menu-icon bx bx-file"></i>
-        <div data-i18n="Layouts">Administrasi</div>
-      </a>
-      <ul class="menu-sub">
-        <li class="menu-item">
-          <a href="layouts-without-menu.html" class="menu-link">
-            <div data-i18n="Without menu">Pembayaran</div>
+        {{-- <li class="menu-item {{ request()->routeIs('kalender.index') ? 'active' : '' }}">
+          <a href="{{ route('kalender.index') }}" class="menu-link">
+            <div data-i18n="Without menu">Kalender</div>
           </a>
-        </li>
+        </li> --}}
       </ul>
     </li>
-
     <li class="menu-header small text-uppercase">
       <span class="menu-header-text">Ringkasan</span>
     </li>
-    <li class="menu-item">
-      <a href="" class="menu-link">
-        <i class="menu-icon bx bx-user"></i>
-        <div>Informasi Siswa</div>
-      </a>
-    </li>
-    {{-- @foreach(App\Models\MyClass::orderBy('name')->get() as $c) --}}
-    <li class="menu-item open {{ request()->routeIs('teacher.schedule') ? 'active' : '' }}">
+    <li class="menu-item {{ request()->routeIs('teacher.schedule', 'attendance.open.view') ? 'active' : '' }}">
       <a href="{{ route('teacher.schedule') }}" class="menu-link">
         <i class="menu-icon bx bx-book"></i>
-        <div data-i18n="Account Settings">Informasi Kelas</div>
+        <div data-i18n="Account Settings">Mata Pelajaran</div>
       </a>
     </li>
-    
-  
-    {{-- @endforeach --}}
-    {{-- @foreach(App\Models\MyClass::orderBy('name')->get() as $c)
-    <ul class="menu-sub">
-      <li class="menu-item {{ request()->route('class_id') == $c->id ? 'active' : '' }}">
-        <a href="{{ route('students.list', ['class_id' => $c->id]) }}" class="menu-link">
-          <div data-i18n="Account">{{ $c->name }}</div>
-        </a>
-      </li>          
-    </ul>       
-    @endforeach --}}
-  {{-- <li class="menu-item {{ request()->routeIs('students.list') ? 'active' : '' }}">
-    <a href="{{ route('students.list', ['class_id' => $c->id]) }}" class="menu-link">
-      <i class="menu-icon bx bx-book"></i>
-      <div>Informasi Kelas</div>
-    </a>
-  </li> --}}
-
-    {{-- @foreach(App\Models\MyClass::orderBy('name')->get() as $c)
-        <li class="nav-item"><a href="{{ route('students.list', $c->id) }}" class="nav-link ">{{ $c->name }}</a></li>
-    @endforeach --}}
-    {{-- <li class="menu-item">
-      <a href="" class="menu-link">
-        <i class="menu-icon bx bxs-graduation"></i>
-        <div>Data Wisuda</div>
+    <li class="menu-item {{ request()->routeIs('assignments.index', 'assignments.create', 'assignments.show') ? 'active' : '' }}">
+      <a href="{{ route('assignments.index') }}" class="menu-link">
+        <i class="menu-icon bx bx-book-open"></i>
+        <div data-i18n="Account Settings">Tugas</div>
       </a>
-    </li> --}}
-    {{-- <li class="menu-item">
-      <a href="" class="menu-link">
-        <i class="menu-icon bx bxs-user-detail"></i>
-        <div>Roles</div>
+    </li>
+    <li class="menu-item {{ request()->routeIs('teacher.schedules.index', 'teacher.schedules.show') ? 'active' : '' }}">
+      <a href="{{ route('teacher.schedules.index') }}" class="menu-link">
+        <i class="menu-icon bx bx-calendar-event"></i>
+        <div data-i18n="Account Settings">Jadwal</div>
       </a>
-    </li> --}}
-    {{-- <li class="menu-item {{ request()->routeIs('kelas.index', 'mapel.index') ? 'active' : '' }}">
-      <a href="{{ route('kelas.index') }}" class="menu-link">
-        <i class="menu-icon bx bx-arch"></i>
-        <div>Kelas</div>
+    </li>
+    <li class="menu-item {{ request()->routeIs('quiz.create') ? 'active open' : '' }}">
+      <a href="" class="menu-link menu-toggle">
+        <i class="menu-icon bx bx-edit-alt"></i>
+        <div data-i18n="Layouts">Ujian Online</div>
       </a>
-    </li> --}}
-    {{-- <li class="menu-item {{ request()->routeIs('mapel.index') ? 'active' : '' }}">
-      <a href="{{ route('mapel.index') }}" class="menu-link">
-        <i class="menu-icon bx bx-book"></i>
-        <div>Mata Pelajaran</div>
-      </a>
-    </li> --}}
+      <ul class="menu-sub">
+        <li class="menu-item {{ request()->routeIs('quiz.create') ? 'active' : '' }}">
+          <a href="{{ route('quiz.create') }}" class="menu-link">
+            <div data-i18n="Without menu">Kuis</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-without-menu.html" class="menu-link">
+            <div data-i18n="Without menu">UTS</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="layouts-without-menu.html" class="menu-link">
+            <div data-i18n="Without menu">UAS</div>
+          </a>
+        </li>
+      </ul>
+    </li>
   </ul>

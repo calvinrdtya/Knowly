@@ -20,7 +20,7 @@
     <!-- /Search -->
 
     <ul class="navbar-nav flex-row align-items-center ms-auto">
-      
+      <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
 
       <!-- User -->
       <li class="nav-item navbar-dropdown dropdown-user dropdown">
@@ -39,7 +39,7 @@
                   </div>
                 </div>
                 <div class="flex-grow-1">
-                  <span class="fw-semibold d-block">{{ Auth::user()->name }}</span>
+                  <span class="fw-semibold d-block">{{ Auth::user()->user }}</span>
                   <small class="text-muted">{{ Auth::user()->user_type }}</small>
                 </div>
               </div>

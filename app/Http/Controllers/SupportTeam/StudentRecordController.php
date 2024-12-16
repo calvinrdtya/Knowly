@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\SupportTeam;
 
+use DB;
 use Carbon\Carbon;
 use App\Helpers\Qs;
 use App\Helpers\Mk;
@@ -18,6 +19,9 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use App\Models\Subject;
 use App\Models\StudentRecord;
+use App\Models\MyClass;
+use App\Models\Assignment;
+use Illuminate\Http\Request;
 
 class StudentRecordController extends Controller
 {
@@ -233,6 +237,51 @@ class StudentRecordController extends Controller
         $this->user->delete($sr->user->id);
 
         return back()->with('flash_success', __('msg.del_ok'));
+    }
+    public function schedule()
+    {
+        // Ambil user yang sedang login
+        $user = Auth::user();
+
+        // Pastikan user adalah student dan memiliki my_class_id
+        if ($user->user_type !== 'student' || is_null($user->my_class_id)) {
+            return redirect()->back()->with('error', 'Anda tidak memiliki akses ke jadwal ini.');
+        }
+
+        // Ambil data kelas (my_class) berdasarkan my_class_id user
+        $my_class = MyClass::find($user->my_class_id);
+
+        // Pastikan kelas ditemukan
+        if (!$my_class) {
+            return redirect()->back()->with('error', 'Kelas tidak ditemukan.');
+        }
+
+        // Ambil data subject berdasarkan my_class_id
+        $subjects = Subject::where('my_class_id', $my_class->id)->get();
+
+        // Kirimkan data ke view
+        return view('student.schedule.index', compact('subjects', 'my_class'));
+    }
+    public function tugas(Request $request)
+    {
+        // Ambil my_class_id dari user yang sedang login
+        $myClassId = auth()->user()->my_class_id;
+
+        // Ambil subject yang memiliki my_class_id yang sama
+        $subjects = Subject::where('my_class_id', $myClassId)->get();
+
+        // Query assignments dengan relasi subject
+        $assignments = Assignment::where('class_id', $myClassId)->with('subject');
+
+        if ($request->has('subject')) {
+            // Filter berdasarkan subject_id yang dipilih
+            $assignments = $assignments->where('subject_id', $request->subject);
+        }
+
+        // Ambil tugas-tugas yang sudah difilter
+        $assignments = $assignments->get();
+
+        return view('student.tugas.index', compact('subjects', 'assignments'));
     }
 
 }

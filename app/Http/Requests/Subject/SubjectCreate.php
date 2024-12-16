@@ -21,13 +21,13 @@ class SubjectCreate extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|min:3',
-            'my_class_id' => 'required',
-            'teacher_id' => 'required|exists:users,id,user_type,teacher',
-            'slug' => 'nullable|string|min:1',
-            'hari' => 'required|integer|min:1|max:5',
+            'name' => 'required|string|max:100',
+            'slug' => 'required|string|max:100|unique:subjects,slug',
+            'my_class_id' => 'required|exists:my_classes,id',
+            'teacher_id' => 'required|exists:users,id',
+            'hari' => 'required|integer|min:1|max:7',
             'jam_mulai' => 'required|date_format:H:i',
-            'jam_selesai' => 'required|date_format:H:i',
+            'jam_selesai' => 'required|date_format:H:i|after:jam_mulai',
         ];
     }
     public function attributes()

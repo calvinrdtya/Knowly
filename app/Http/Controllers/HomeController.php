@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\Qs;
 use App\Repositories\UserRepo;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Assignment;
+use App\Models\Subject;
 
 class HomeController extends Controller
 {
@@ -13,7 +15,6 @@ class HomeController extends Controller
     {
         $this->user = $user;
     }
-
     public function index()
     {
         if (Auth::check()) {
@@ -22,7 +23,6 @@ class HomeController extends Controller
             return view('home');
         }
     }
-
     public function privacy_policy()
     {
         $data['app_name'] = config('app.name');
@@ -30,7 +30,6 @@ class HomeController extends Controller
         $data['contact_phone'] = Qs::getSetting('phone');
         return view('pages.other.privacy_policy', $data);
     }
-
     public function terms_of_use()
     {
         $data['app_name'] = config('app.name');
@@ -38,44 +37,34 @@ class HomeController extends Controller
         $data['contact_phone'] = Qs::getSetting('phone');
         return view('pages.other.terms_of_use', $data);
     }
-
     public function dashboard()
     {
-        // Ambil tipe user yang sedang login
         $userType = auth()->user()->user_type;
+        $myClassId = auth()->user()->my_class_id;
+        $userId = auth()->user()->id;
 
-        // Cek tipe user dan arahkan ke dashboard yang sesuai
+        $assignments = Assignment::where('class_id', $myClassId)->get();
+
+        $subjects = Subject::where('teacher_id', $userId)->get();
+
         switch ($userType) {
             case 'super_admin':
                 return view('back.dashboard');
-                // return view('pages.support_team.dashboard', $d);
             case 'admin':
                 return view('back.dashboard');
-                // return view('pages.support_team.dashboard', $d);
             case 'teacher':
-                return view('teacher.teacher');
-                // return view('pages.support_team.dashboard');
+                return view('teacher.teacher', ['assignments' => $assignments, 'subjects' => $subjects]);
             case 'student':
-                return view('back.dashboard');
-                // return view('pages.support_team.dashboard', $d);
+                return view('student.student', ['assignments' => $assignments]);
             case 'accountant':
                 return view('back.dashboard');
-                // return view('pages.support_team.dashboard', $d);
             default:
-                // Redirect ke halaman error jika tipe user tidak valid
                 return redirect()->route('login')->with('danger', 'Tipe pengguna tidak dikenali.');
         }
     }
 
-
-    // public function dashboard()
-    // {
-    //     $d=[];
-    //     if(Qs::userIsTeamSAT()){
-    //         $d['users'] = $this->user->getAll();
-    //     }
-
-    //     return view('pages.support_team.dashboard', $d);
-    //     // return view('back.dashboard', $d);
-    // }
+    public function kalender()
+    {
+        return view('kalender');
+    }
 }

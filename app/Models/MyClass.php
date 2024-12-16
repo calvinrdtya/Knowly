@@ -35,9 +35,4 @@ class MyClass extends Eloquent
     {
         return $this->hasMany(User::class, 'teacher_id');
     }
-
-    public function subjects()
-    {
-        return $this->hasMany(Subject::class);
-    }
 }

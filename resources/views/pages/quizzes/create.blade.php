@@ -28,7 +28,7 @@
                 <select name="questions[0][type]" class="question-type" onchange="toggleAnswerOptions(this)">
                     <option value="multiple_choice">Pilihan Ganda</option>
                     <option value="short_answer">Isian Singkat</option>
-                </select><br>
+                </select>
 
                 <!-- Opsi Jawaban Pilihan Ganda -->
                 <div class="multiple-choice-options">

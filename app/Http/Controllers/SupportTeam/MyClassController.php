@@ -27,8 +27,8 @@ class MyClassController extends Controller
         $d['my_classes'] = $this->my_class->all();
         $d['class_types'] = $this->my_class->getTypes();
 
-        return view('pages.support_team.classes.index', $d);
-        // return view('back.pages.kelas.index', $d);
+        // return view('pages.support_team.classes.index', $d);
+        return view('back.pages.kelas.index', $d);
     }
 
     public function store(ClassCreate $req)

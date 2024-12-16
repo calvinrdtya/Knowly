@@ -15,60 +15,75 @@ class QuizController extends Controller
     {
         $this->middleware('auth');
     }
+    
     public function index()
     {
-
         $quizzes = Quiz::all();
-        return view('pages.quizzes.index', compact('quizzes'));
+        // return view('pages.quizzes.index', compact('quizzes'));
+        return view('student.kuis.index', compact('quizzes'));
     }
 
     public function show(Quiz $quiz)
     {
-        $quiz->load('questions.answers'); // Load pertanyaan dan jawaban
+        $quiz->load('questions.answers');
         return view('pages.quizzes.show', compact('quiz'));
     }
     public function create()
     {
-        return view('pages.quizzes.create');
+        if (auth()->user()->user_type !== 'teacher') {
+            return redirect()->route('quizzes.index')->with('error', 'Ups kamu tidak dapat membuat kuis.');
+        }
+        // return view('pages.quizzes.create');
+        return view('teacher.pages.kuis.create');
     }
 
-    // Menyimpan kuis beserta pertanyaan dan jawabannya
     public function store(Request $request)
     {
+        if (auth()->user()->user_type !== 'teacher') {
+            return redirect()->route('quizzes.index')->with('error', 'Ups, kamu tidak dapat membuat kuis.');
+        }
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
+            'questions' => 'required|array|min:1',
             'questions.*.question' => 'required|string|max:500',
-            'questions.*.answers.*.answer' => 'required|string|max:255',
-            'questions.*.correct_answer' => 'required|integer',
-            'type' => ['required', Rule::in(Question::getAllowedTypes())],
+            'questions.*.type' => ['required', Rule::in(['multiple_choice', 'short_answer'])],
+            'questions.*.correct_answer' => 'required_if:questions.*.type,multiple_choice|integer|min:0|max:3',
         ]);
 
         // Simpan kuis
         $quiz = Quiz::create([
             'title' => $request->title,
             'description' => $request->description,
-            'type' => $request->type
         ]);
 
-        // Simpan pertanyaan dan jawaban
         foreach ($request->questions as $questionData) {
             $question = Question::create([
                 'quiz_id' => $quiz->id,
                 'question' => $questionData['question'],
+                'type' => $questionData['type'],
             ]);
 
-            foreach ($questionData['answers'] as $key => $answerData) {
+            if ($questionData['type'] === 'multiple_choice') {
+                foreach ($questionData['answers'] as $key => $answerData) {
+                    Answer::create([
+                        'question_id' => $question->id,
+                        'answer' => $answerData['answer'],
+                        'is_correct' => $key == $questionData['correct_answer'],
+                    ]);
+                }
+            } elseif ($questionData['type'] === 'short_answer') {
                 Answer::create([
                     'question_id' => $question->id,
-                    'answer' => $answerData['answer'],
-                    'is_correct' => $key == $questionData['correct_answer'],
+                    'answer' => $questionData['answers'][0]['answer'],
+                    'is_correct' => true, 
                 ]);
             }
         }
-
-        return redirect()->route('quiz.create')->with('success', 'Quiz created successfully!');
+        return redirect()->route('quizzes.index')->with('success', 'Quiz berhasil dibuat!');
     }
+
     public function submit(Request $request, Quiz $quiz)
     {
         $score = 0;
@@ -107,8 +122,6 @@ class QuizController extends Controller
                 ) ? 1 : 0,
             ]);
         }
-
-
         return redirect()->route('quizzes.index')->with('success', "Kuis selesai! Skor Anda: $score");
     }
 }

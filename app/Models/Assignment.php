@@ -23,17 +23,14 @@ class Assignment extends Model
     {
         return $this->belongsTo(User::class, 'teacher_id');
     }
-
     public function subject()
     {
         return $this->belongsTo(Subject::class);
     }
-
     public function class()
     {
         return $this->belongsTo(MyClass::class, 'class_id');
     }
-
     public function submissions()
     {
         return $this->hasMany(AssignmentSubmission::class);

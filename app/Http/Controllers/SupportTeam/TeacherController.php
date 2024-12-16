@@ -7,17 +7,30 @@ use App\Http\Controllers\Controller;
 use App\Models\Subject;
 use App\Models\Section;
 use App\Models\StudentRecord;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class TeacherController extends Controller
 {
+    public function schedule()
+    {
+        // Ambil ID guru yang sedang login
+        $teacher_id = Auth::id();
+
+        // Ambil data subject berdasarkan teacher_id
+        $subjects = Subject::where('teacher_id', $teacher_id)->get();
+
+        // Mengirimkan data ke view untuk menampilkan jadwal
+        return view('teacher.pages.siswa.index', compact('subjects'));
+    }
+
     public function showSchedule()
     {
-        // Ambil teacher_id dari pengguna yang sedang login
-        $teacher_id = auth()->id();
-        
-        // Ambil semua data subjects yang ada di tabel subjects
-        // Jika Anda ingin menampilkan semua mata pelajaran yang ada, cukup ambil semua data dari tabel subjects
-        $subjects = Subject::all();
+        // Ambil ID guru yang sedang login
+        $teacher_id = Auth::id();
+
+        // Ambil data subject berdasarkan teacher_id
+        $subjects = Subject::where('teacher_id', $teacher_id)->get();
 
         // Mengirimkan data ke view untuk menampilkan jadwal
         return view('teacher.pages.siswa.index', compact('subjects'));

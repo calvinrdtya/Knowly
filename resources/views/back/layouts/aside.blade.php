@@ -55,7 +55,7 @@
           </g>
         </svg> --}}
       </span>
-      <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+      <span class="app-brand-text demo menu-text fw-bolder ms-2">{{ Auth::user()->name }}</span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -83,23 +83,29 @@
       <ul class="menu-sub">
         <li class="menu-item">
           <a href="layouts-without-menu.html" class="menu-link">
-            <div data-i18n="Without menu">Timetables</div>
+            <div data-i18n="Without menu">Kalender</div>
           </a>
         </li>
       </ul>
     </li>
     <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <a href="" class="menu-link menu-toggle">
         <i class="menu-icon bx bx-file"></i>
         <div data-i18n="Layouts">Administrasi</div>
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
-          <a href="layouts-without-menu.html" class="menu-link">
+          <a href="" class="menu-link">
             <div data-i18n="Without menu">Pembayaran</div>
           </a>
         </li>
       </ul>
+    </li>
+    <li class="menu-item {{ request()->routeIs('jadwal.index') ? 'active' : '' }}">
+      <a href="{{ route('jadwal.index') }}" class="menu-link">
+        <i class="menu-icon bx bx-arch"></i>
+        <div>Jadwal</div>
+      </a>
     </li>
 
     <li class="menu-header small text-uppercase">
@@ -112,7 +118,7 @@
       </a>
     </li>
     <li class="menu-item">
-      <a href="javascript:void(0);" class="menu-link menu-toggle">
+      <a href="" class="menu-link menu-toggle">
         <i class="menu-icon bx bxs-user"></i>
         <div data-i18n="Account Settings">Informasi Siswa</div>
       </a>

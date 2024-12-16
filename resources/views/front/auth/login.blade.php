@@ -10,7 +10,7 @@
                     <div class="section-heading">
                         <a href="{{ url('/') }}"><h6>Knowly Unlock Your Learning Potential</h6></a>
                         <h2>Selamat Datang <br> Kembali</h2>
-                        <p>Silakan masuk untuk melanjutkan. Jika Anda belum memiliki akun, Anda dapat mendaftar di sini.</p>
+                        <p>Silakan masuk untuk melanjutkan. Jika Anda belum memiliki akun maka Anda harus mendaftar terlebih dahulu</p>
                     </div>
                 </div>
                 <div class="col-lg-6 d-flex justify-content-center my-3">
@@ -32,6 +32,9 @@
                                     <fieldset>
                                         <button type="submit" id="form-submit" class="orange-button w-100">Login</button>
                                     </fieldset>
+                                </div>
+                                <div class="col-lg-12 d-flex justify-content-center mt-4">
+                                    <a href="#" class="text-white">Daftar Akun</a>
                                 </div>
                             </div>
                         </form>

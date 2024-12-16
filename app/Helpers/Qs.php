@@ -358,9 +358,18 @@ class Qs
         return self::goToRoute($to)->with('flash_success', $msg);
     }
 
+
     public static function getDaysOfTheWeek()
     {
-        return ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+        return [
+            'Monday' => 'Senin',
+            'Tuesday' => 'Selasa',
+            'Wednesday' => 'Rabu',
+            'Thursday' => 'Kamis',
+            'Friday' => 'Jumat',
+            'Saturday' => 'Sabtu',
+            'Sunday' => 'Minggu'
+        ];
     }
 
 }
