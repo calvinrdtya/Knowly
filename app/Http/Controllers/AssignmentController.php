@@ -187,10 +187,9 @@ class AssignmentController extends Controller
         if (!$subject) {
             return redirect()->back()->with('error', 'Mata pelajaran tidak ditemukan atau Anda bukan pengajarnya.');
         }
-        // Ambil data siswa berdasarkan my_class_id dari subject
         $students = DB::table('users')
-            ->select('absen', 'name', 'username', 'gender') // Ambil kolom yang dibutuhkan
-            ->where('user_type', 'student') // Filter user_type 'student'
+            ->select('absen', 'name', 'username', 'gender')
+            ->where('user_type', 'student')
             ->where('my_class_id', $subject->id) 
             ->get();
 
@@ -213,4 +212,28 @@ class AssignmentController extends Controller
         ];
         return view('teacher.pages.tugas.show', $data);
     }
+    
+    public function assignmentShow($assignment_id)
+    {
+        // Ambil data assignment berdasarkan ID
+        $assignment = Assignment::with('submissions')->findOrFail($assignment_id);
+
+        // Periksa apakah user sudah mengirim submission
+        $submission = $assignment->submissions->where('student_id', auth()->id())->first();
+        $isSubmitted = $submission !== null;
+        $isEditing = $isSubmitted;
+
+        // Siapkan data untuk dikirim ke view
+        $data = [
+            'assignment' => $assignment,
+            'submission' => $submission,
+            'isSubmitted' => $isSubmitted,
+            'isEditing' => $isEditing
+        ];
+
+        // Tampilkan view assignment show
+        return view('teacher.pages.tugas.show', $data);
+    }
+
+    
 }

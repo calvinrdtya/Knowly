@@ -6,6 +6,7 @@ use App\Helpers\Qs;
 use App\Repositories\UserRepo;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Assignment;
+use App\Models\Subject;
 
 class HomeController extends Controller
 {
@@ -47,10 +48,14 @@ class HomeController extends Controller
         // Ambil my_class_id pengguna yang login
         $myClassId = auth()->user()->my_class_id;
 
+        // Ambil ID pengguna (guru) yang sedang login
+        $userId = auth()->user()->id;
+
         // Ambil data assignments yang memiliki class_id sama dengan pengguna yang login
         $assignments = Assignment::where('class_id', $myClassId)->get();
-        // dd($myClassId);
 
+        // Ambil data subject yang memiliki teacher_id sama dengan id teacher yang login
+        $subjects = Subject::where('teacher_id', $userId)->get();
 
         switch ($userType) {
             case 'super_admin':
@@ -58,8 +63,10 @@ class HomeController extends Controller
             case 'admin':
                 return view('back.dashboard');
             case 'teacher':
-                return view('teacher.teacher');
+                // Kirim data assignments dan subjects ke view teacher
+                return view('teacher.teacher', ['assignments' => $assignments, 'subjects' => $subjects]);
             case 'student':
+                // Kirim data assignments ke view student
                 return view('student.student', ['assignments' => $assignments]);
             case 'accountant':
                 return view('back.dashboard');
@@ -67,6 +74,7 @@ class HomeController extends Controller
                 return redirect()->route('login')->with('danger', 'Tipe pengguna tidak dikenali.');
         }
     }
+
 
 
 

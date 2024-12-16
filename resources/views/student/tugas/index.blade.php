@@ -57,6 +57,7 @@
                                         </div>
                                         <div class="mt-3">
                                             <p class="mb-2" id="deskripsi">Guru : {{ $assignment->teacher->name }}</p>
+                                            <p class="mb-2" id="deskripsi">Mata Pelajaran : {{ $assignment->subject->name ?? 'Tidak Ada Subject' }}</p>
                                             <p class="mb-2" id="deskripsi">Deadline : {{ \Carbon\Carbon::parse($assignment->due_date)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}</p>
                                         </div>
                                         <hr class="my-3">

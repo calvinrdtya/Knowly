@@ -34,10 +34,6 @@
                                             <select class="form-select" id="hari" name="hari" aria-label="Default select example" required>
                                                 <option selected>Tahun Ajaran</option>
                                                 <option value="1">2024/2025</option>
-                                                <option value="1">2023/2024</option>
-                                                <option value="1">2022/2023</option>
-                                                <option value="1">2021/2022</option>
-                                                <option value="1">2020/2021</option>
                                             </select>
                                             @error('hari')
                                                 <span class="text-danger">{{ $message }}</span>

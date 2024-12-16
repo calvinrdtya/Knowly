@@ -23,7 +23,6 @@
                 <!-- Content wrapper -->
             <div class="content-wrapper">
                 <div class="container-xxl flex-grow-1 container-p-y">
-                    <h4 class="fw-bold"><a href="{{ route('student.assignment') }}"><span class="text-muted fw-light">Tugas /</span></a> Pengumpulan</h4>
                     @if (session('error'))
                         <div class="alert alert-danger" role="alert">
                             {{ session('error') }}
@@ -42,21 +41,21 @@
                             <div class="col-md-7">
                                 <div class="card-body p-3">
                                     <div class="row">
-                                        <div class="my-3">
-                                            <h6 class="card-title text-dark mb-2">Deskripsi</h6>
+                                        <div class="my-2">
+                                            <h6 class="card-title text-dark mb-1">Deskripsi</h6>
                                             <p class="mb-0">{{ $assignment->description }}</p>
                                         </div>
-                                        <div class="my-3">
-                                            <h6 class="card-title text-dark mb-2">Batas Waktu</h6>
+                                        <div class="my-2">
+                                            <h6 class="card-title text-dark mb-1">Batas Waktu</h6>
                                             <p class="mb-0">{{ \Carbon\Carbon::parse($assignment->due_date)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}</p>
                                         </div>
-                                        <div class="my-3">
-                                            <h6 class="card-title text-dark mb-2">Mengumpulkan</h6>
+                                        <div class="my-2">
+                                            <h6 class="card-title text-dark mb-1">Mengumpulkan</h6>
                                             <p class="mb-0">Kosong</p>
                                         </div>
-                                        <div class="my-3">
-                                            <h6 class="card-title text-dark mb-2">Lampiran</h6>
-                                            <p class="mb-0">-</p>
+                                        <div class="my-2">
+                                            <h6 class="card-title text-dark mb-1">Lampiran</h6>
+                                            <p class="mb-0"></p>
                                         </div>
                                     </div>       
                                 </div>
@@ -69,14 +68,14 @@
                                     @endif
                                     <div class="card-body p-3">
                                         <div class="row">
-                                            <div class="my-3">
+                                            <div class="my-2">
                                                 <h6 class="card-title text-dark mb-2">Catatan</h6>
                                                 <textarea name="notes" id="notes" class="form-control" rows="3" placeholder="Tambahkan catatan untuk tugas ini..." {{ $isSubmitted && !$isEditing ? 'disabled' : '' }} required>{{ $isSubmitted ? $submission->notes : '' }}</textarea>
                                                 <div class="invalid-feedback">
                                                     Catatan tidak boleh kosong.
                                                 </div>
                                             </div>
-                                            <div class="my-3">
+                                            <div class="my-2">
                                                 <h6 class="card-title text-dark mb-3">Lampiran</h6>
                                                 <input type="file" name="file" id="file" class="form-control" {{ $isSubmitted && !$isEditing ? 'disabled' : '' }}>
                                                 @if ($isSubmitted && $submission->file)

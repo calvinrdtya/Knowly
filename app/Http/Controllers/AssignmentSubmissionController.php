@@ -87,20 +87,20 @@ class AssignmentSubmissionController extends Controller
     }
 
     public function edit($submissionId)
-{
-    $submission = AssignmentSubmission::findOrFail($submissionId);
-    $assignment = $submission->assignment;
+    {
+        $submission = AssignmentSubmission::findOrFail($submissionId);
+        $assignment = $submission->assignment;
 
-    if ($submission->student_id !== auth()->id()) {
-        abort(403, 'Anda tidak memiliki izin untuk mengedit tugas ini.');
+        if ($submission->student_id !== auth()->id()) {
+            abort(403, 'Anda tidak memiliki izin untuk mengedit tugas ini.');
+        }
+
+        return view('assignments.show', [
+            'assignment' => $assignment,
+            'submission' => $submission,
+            'isSubmitted' => true,
+            'isEditing' => true,
+        ]);
     }
-
-    return view('assignments.show', [
-        'assignment' => $assignment,
-        'submission' => $submission,
-        'isSubmitted' => true,
-        'isEditing' => true,
-    ]);
-}
 
 }

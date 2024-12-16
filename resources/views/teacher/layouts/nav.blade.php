@@ -39,7 +39,7 @@
                 </div>
               </div>
               <div class="flex-grow-1">
-                <span class="fw-semibold d-block">{{ Auth::user()->user }}</span>
+                <span class="fw-semibold d-block">{{ substr(Auth::user()->name, 0, 15) . '...' }}</span>
                 <small class="text-muted">{{ Auth::user()->user_type }}</small>
               </div>
             </div>

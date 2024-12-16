@@ -21,156 +21,156 @@
                 <!-- / Navbar -->
     
                 <!-- Content wrapper -->
-            <div class="content-wrapper">
-                <div class="container-xxl flex-grow-1 container-p-y">
-                    @if (session('error'))
-                        <div class="alert alert-danger" role="alert">
-                            {{ session('error') }}
-                        </div>
-                    @endif
-                    @if (session('success'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                    <div class="card p-4">
-                        <div class="row">
-                            <div class="card-title">
-                                <h4 class="card-title text-dark mb-">{{ $subject->name }}</h4>
+                <div class="content-wrapper">
+                    <div class="container-xxl flex-grow-1 container-p-y">
+                        @if (session('error'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ session('error') }}
                             </div>
-                            <div class="col-md-8">
-                                <div class="card-body p-3">
+                        @endif
+                        @if (session('success'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        <div class="card p-4">
+                            <div class="row">
+                                <div class="card-title">
+                                    <h4 class="card-title text-dark mb-">{{ $subject->name }}</h4>
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="card-body p-3">
+                                        <div class="row">
+                                            <div class="col-md-3 d-flex justify-content-start align-items-center">
+                                                <h6 class="card-title text-dark mb-0">NIP</h6>
+                                            </div>
+                                            <div class="col-md-9 d-flex justify-content-start">
+                                                <p class="mb-0">: 197505302003121001</p>
+                                            </div>
+                                            <div class="col-md-3 d-flex justify-content-start mt-3 align-items-center">
+                                                <h6 class="card-title text-dark mb-0">Nama Guru</h6>
+                                            </div>
+                                            <div class="col-md-9 d-flex justify-content-start mt-3 align-items-center">
+                                                <p class="mb-0">: {{ optional($subject->teacher)->name }}</p>
+                                            </div>
+                                            <div class="col-md-3 d-flex justify-content-start mt-3 align-items-center">
+                                                <h6 class="card-title text-dark mb-0">Jadwal</h6>
+                                            </div>
+                                            <div class="col-md-9 d-flex justify-content-start mt-3">
+                                                @php
+                                                    $days = [
+                                                        1 => 'Senin',
+                                                        2 => 'Selasa',
+                                                        3 => 'Rabu',
+                                                        4 => 'Kamis',
+                                                        5 => 'Jumat',
+                                                        6 => 'Sabtu',
+                                                        7 => 'Minggu',
+                                                    ];
+                                                    $dayName = $days[$subject->hari] ?? 'Unknown';
+                                                @endphp
+                                                <p class="mb-0">: {{ $dayName }}, {{ \Carbon\Carbon::parse($subject->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($subject->jam_selesai)->format('H:i') }}</p>
+                                            </div>
+                                        </div>       
+                                    </div>
+                                </div>
+                                <div class="col-md-4 p-3">
                                     <div class="row">
-                                        <div class="col-md-3 d-flex justify-content-start align-items-center">
-                                            <h6 class="card-title text-dark mb-0">NIP</h6>
+                                        <div class="col-md-4 d-flex justify-content-start align-items-center">
+                                            <h6 class="card-title text-dark mb-0">Laki-Laki</h6>
                                         </div>
-                                        <div class="col-md-9 d-flex justify-content-start">
-                                            <p class="mb-0">: 197505302003121001</p>
+                                        <div class="col-md-8 d-flex justify-content-start">
+                                            <p class="mb-0">: {{ $totalMale }}</p>
                                         </div>
-                                        <div class="col-md-3 d-flex justify-content-start mt-3 align-items-center">
-                                            <h6 class="card-title text-dark mb-0">Nama Guru</h6>
+                                        <div class="col-md-4 d-flex justify-content-start mt-3 align-items-center">
+                                            <h6 class="card-title text-dark mb-0">Perempuan</h6>
                                         </div>
-                                        <div class="col-md-9 d-flex justify-content-start mt-3 align-items-center">
-                                            <p class="mb-0">: {{ optional($subject->teacher)->name }}</p>
+                                        <div class="col-md-8 d-flex justify-content-start mt-3 align-items-center">
+                                            <p class="mb-0">: {{ $totalFemale }}</p>
                                         </div>
-                                        <div class="col-md-3 d-flex justify-content-start mt-3 align-items-center">
-                                            <h6 class="card-title text-dark mb-0">Jadwal</h6>
+                                        <div class="col-md-4 d-flex justify-content-start mt-3 align-items-center">
+                                            <h6 class="card-title text-dark mb-0">Total</h6>
                                         </div>
-                                        <div class="col-md-9 d-flex justify-content-start mt-3">
-                                            @php
-                                                $days = [
-                                                    1 => 'Senin',
-                                                    2 => 'Selasa',
-                                                    3 => 'Rabu',
-                                                    4 => 'Kamis',
-                                                    5 => 'Jumat',
-                                                    6 => 'Sabtu',
-                                                    7 => 'Minggu',
-                                                ];
-                                                $dayName = $days[$subject->hari] ?? 'Unknown';
-                                            @endphp
-                                            <p class="mb-0">: {{ $dayName }}, {{ \Carbon\Carbon::parse($subject->jam_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($subject->jam_selesai)->format('H:i') }}</p>
+                                        <div class="col-md-8 d-flex justify-content-start mt-3 align-items-center">
+                                            <p class="mb-0">: {{ $students->count() }}</p>
                                         </div>
-                                    </div>       
-                                </div>
-                            </div>
-                            <div class="col-md-4 p-3">
-                                <div class="row">
-                                    <div class="col-md-4 d-flex justify-content-start align-items-center">
-                                        <h6 class="card-title text-dark mb-0">Laki-Laki</h6>
-                                    </div>
-                                    <div class="col-md-8 d-flex justify-content-start">
-                                        <p class="mb-0">: {{ $totalMale }}</p>
-                                    </div>
-                                    <div class="col-md-4 d-flex justify-content-start mt-3 align-items-center">
-                                        <h6 class="card-title text-dark mb-0">Perempuan</h6>
-                                    </div>
-                                    <div class="col-md-8 d-flex justify-content-start mt-3 align-items-center">
-                                        <p class="mb-0">: {{ $totalFemale }}</p>
-                                    </div>
-                                    <div class="col-md-4 d-flex justify-content-start mt-3 align-items-center">
-                                        <h6 class="card-title text-dark mb-0">Total</h6>
-                                    </div>
-                                    <div class="col-md-8 d-flex justify-content-start mt-3 align-items-center">
-                                        <p class="mb-0">: {{ $students->count() }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-7">
-                            <div class="card border-1 my-4">
-                                <div class="card-body p-3">
-                                    <div class="d-flex align-items-center justify-content-between my-3">
-                                        <h5 class="card-title text-dark">Pengumpulan Tugas</h5>
-                                        <div class="d-flex align-items-center">
-                                            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter">
-                                                Buat Tugas
-                                            </button>      
-                                        </div>
-                                    </div>
-                                    <div class="table-responsive text-nowrap">
-                                        @if($students->isEmpty())
-                                            <p>Data Siswa Tidak Ada</p>
-                                        @else
-                                            <table class="table table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Absen</th>
-                                                        <th>Nama</th>
-                                                        <th>Kelas</th>
-                                                        <th>Presensi</th>
-                                                    </tr>
-                                                </thead>
-                                                @foreach ($students as $student)
-                                                    <tbody class="table-border-bottom-0">
-                                                        <tr>
-                                                            <td>{{ $student->absen }}</td>
-                                                            <td>{{ $student->name }}</td>
-                                                            <td>{{ $student->gender }}</td>
-                                                            <td>{{ $student->gender }}</td>
-                                                        </tr>
-                                                    </tbody>
-                                                @endforeach
-                                            </table>
-                                        @endif
-                                    </div>                                   
-                                    <hr class="my-4">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            @forelse($assignments as $assignment)
+                        <div class="row">
+                            <div class="col-md-7">
                                 <div class="card border-1 my-4">
                                     <div class="card-body p-3">
-                                        <div class="card-title">
-                                            <h5 class="card-title text-dark mb-4">{{ $assignment->title }}</h5>
-                                            <p class="mb-4" id="deskripsi">{{ $assignment->description }}</p>
+                                        <div class="d-flex align-items-center justify-content-between my-3">
+                                            <h5 class="card-title text-dark">Pengumpulan Tugas</h5>
+                                            <div class="d-flex align-items-center">
+                                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalCenter">
+                                                    Buat Tugas
+                                                </button>      
+                                            </div>
                                         </div>
-                                        <div class="mt-3">
-                                            @php
-                                                $myClass = \App\Models\MyClass::find($subject->my_class_id);
-                                            @endphp
-                                            <p class="mb-2" id="deskripsi">Kelas : {{ $myClass ? $myClass->name : 'Kelas Tidak Ditemukan' }}</p>
-                                            <p class="mb-2" id="deskripsi">Deadline : {{ \Carbon\Carbon::parse($assignment->due_date)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}</p>
-                                        </div>
-                                        <hr class="my-3">
-                                        <div class="d-flex justify-content-end">
-                                            <a href="" class="btn btn-sm btn-outline-primary d-flex align-items-center">
-                                                Detail Tugas <i class='bx bx-right-arrow-alt ms-2'></i>
-                                            </a>                                            
-                                        </div>
+                                        <div class="table-responsive text-nowrap">
+                                            @if($students->isEmpty())
+                                                <p>Data Siswa Tidak Ada</p>
+                                            @else
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Absen</th>
+                                                            <th>Nama</th>
+                                                            <th>Kelas</th>
+                                                            <th>Presensi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    @foreach ($students as $student)
+                                                        <tbody class="table-border-bottom-0">
+                                                            <tr>
+                                                                <td>{{ $student->absen }}</td>
+                                                                <td>{{ $student->name }}</td>
+                                                                <td>{{ $student->gender }}</td>
+                                                                <td>{{ $student->gender }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    @endforeach
+                                                </table>
+                                            @endif
+                                        </div>                                   
+                                        <hr class="my-4">
                                     </div>
                                 </div>
-                            @endforeach
+                            </div>
+                            <div class="col-md-5">
+                                @forelse($assignments as $assignment)
+                                    <div class="card border-1 my-4">
+                                        <div class="card-body p-3">
+                                            <div class="card-title">
+                                                <h5 class="card-title text-dark mb-4">{{ $assignment->title }}</h5>
+                                                <p class="mb-4">{{ $assignment->description }}</p>
+                                            </div>
+                                            <div class="mt-3">
+                                                @php
+                                                    $myClass = \App\Models\MyClass::find($subject->my_class_id);
+                                                @endphp
+                                                <p class="mb-2">Kelas : {{ $myClass ? $myClass->name : 'Kelas Tidak Ditemukan' }}</p>
+                                                <p class="mb-2">Deadline : {{ \Carbon\Carbon::parse($assignment->due_date)->isoFormat('dddd, D MMMM YYYY - HH:mm') }}</p>
+                                            </div>
+                                            <hr class="my-3">
+                                            <div class="d-flex justify-content-end">
+                                                <a href="{{ route('teacher.assignments.show', $assignment->subject_id) }}" class="btn btn-sm btn-outline-primary d-flex align-items-center">
+                                                    Detail Tugas <i class='bx bx-right-arrow-alt ms-2'></i>
+                                                </a>                                                                                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
-                    </div>
-                <div class="content-backdrop fade"></div>
-                </div> 
-                <!-- Content wrapper -->
-            </div>
-          <!-- / Layout page -->
+                    <div class="content-backdrop fade"></div>
+                    </div> 
+                    <!-- Content wrapper -->
+                </div>
+            <!-- / Layout page -->
         </div>
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
@@ -181,17 +181,6 @@
         document.getElementById('latitude').value = position.coords.latitude;
         document.getElementById('longitude').value = position.coords.longitude;
     });
-
-    function truncateText(selector, maxLength) {
-        const element = document.querySelector(selector);
-        const text = element.textContent;
-
-        if (text.length > maxLength) {
-            const truncatedText = text.substring(0, maxLength) + "...";
-            element.textContent = truncatedText;
-        }
-    }
-    truncateText("#deskripsi", 120);
 </script>
 
 <!-- Modal -->

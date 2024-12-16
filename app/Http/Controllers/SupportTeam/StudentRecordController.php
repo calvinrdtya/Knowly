@@ -266,12 +266,12 @@ class StudentRecordController extends Controller
     {
         // Ambil my_class_id dari user yang sedang login
         $myClassId = auth()->user()->my_class_id;
-    
+
         // Ambil subject yang memiliki my_class_id yang sama
         $subjects = Subject::where('my_class_id', $myClassId)->get();
-    
-        // Kirim data subject ke view
-        $assignments = Assignment::where('class_id', $myClassId);
+
+        // Query assignments dengan relasi subject
+        $assignments = Assignment::where('class_id', $myClassId)->with('subject');
 
         if ($request->has('subject')) {
             // Filter berdasarkan subject_id yang dipilih
@@ -283,4 +283,5 @@ class StudentRecordController extends Controller
 
         return view('student.tugas.index', compact('subjects', 'assignments'));
     }
+
 }

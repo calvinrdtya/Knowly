@@ -243,11 +243,12 @@ Route::post('assignments', [AssignmentController::class, 'store'])->name('assign
 
 // Route::get('assignments/{assignment}', [AssignmentController::class, 'show'])->name('assignments.show');
 // Route::get('assignments/{subject_id}/create', [AssignmentController::class, 'create'])->name('assignments.create');
-Route::get('assignments/{subject_id}', [AssignmentController::class, 'openAssignmentView'])->name('assignments.show');
 
+Route::get('assignments/{subject_id}', [AssignmentController::class, 'openAssignmentView'])->name('assignments.show');
+// Route::get('assignments/tugas-{subject_id}', [AssignmentController::class, 'assignmentShow'])->name('teacher.assignments.show');
+Route::get('assignments/tugas-{assignment_id}', [AssignmentController::class, 'assignmentShow'])->name('teacher.assignments.show');
 
 Route::get('assignments/submissions/{assignment}', [AssignmentController::class, 'submissions'])->name('assignments.submissions');
-
 
 Route::get('/get-subjects-by-class', [AssignmentController::class, 'getSubjectsByClass']);
 Route::put('assignments/{assignment}/update', [AssignmentController::class, 'update'])->name('assignments.update');
