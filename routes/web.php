@@ -204,23 +204,23 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::post('/attendance/close/{attendance_id}', [AttendanceController::class, 'closeAttendance'])->name('attendance.close');
     
-    Route::get('meeting/{host}', [MeetingController::class, 'index'])->name('meeting.index');
-    Route::post('meeting/start', [MeetingController::class, 'startMeeting'])->name('meeting.start');
+    // Route::get('meeting/{host}', [MeetingController::class, 'index'])->name('meeting.index');
+    // Route::post('meeting/start', [MeetingController::class, 'startMeeting'])->name('meeting.start');
     
-    Route::get('meeting/start/{id}', [MeetingController::class, 'start'])->name('meeting.start');
-    Route::post('meeting/summary', [MeetingController::class, 'generateSummary'])->name('meeting.summary');
+    // Route::get('meeting/start/{id}', [MeetingController::class, 'start'])->name('meeting.start');
+    // Route::post('meeting/summary', [MeetingController::class, 'generateSummary'])->name('meeting.summary');
     
-    Route::post('meeting/signal', [MeetingController::class, 'signal']);
+    // Route::post('meeting/signal', [MeetingController::class, 'signal']);
     
-    Route::post('/meeting/leave/{id}', [MeetingController::class, 'leaveMeeting'])->name('meeting.leave');
-    Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
-    Route::post('/meeting/end/{id}', [MeetingController::class, 'endMeeting'])->name('meeting.end');
+    // Route::post('/meeting/leave/{id}', [MeetingController::class, 'leaveMeeting'])->name('meeting.leave');
+    // Route::post('/meeting/join/{id}', [MeetingController::class, 'joinMeeting'])->name('meeting.join');
+    // Route::post('/meeting/end/{id}', [MeetingController::class, 'endMeeting'])->name('meeting.end');
 
     // Student
     Route::post('kuis/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
     Route::get('kuis', [QuizController::class, 'indexStudent'])->name('student.quizzes.index');
     Route::get('kuis/{quiz}', [QuizController::class, 'showKuisStudent'])->name('student.quizzes.show');
-    Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('quizzes.submit');
+    Route::post('/quizzes/{quiz}/submit', [QuizController::class, 'submit'])->name('teacher.quizzes.submit');
 });
 
 Route::get('quiz', [QuizController::class, 'indexTeacher'])->name('teacher.quizzes.index');

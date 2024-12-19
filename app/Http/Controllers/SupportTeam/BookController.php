@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\SupportTeam;
 
+use App\Http\Controllers\Controller;
 use App\Book;
 use Illuminate\Http\Request;
 

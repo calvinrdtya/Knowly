@@ -33,9 +33,9 @@
                                         <button type="submit" id="form-submit" class="orange-button w-100">Login</button>
                                     </fieldset>
                                 </div>
-                                <div class="col-lg-12 d-flex justify-content-center mt-4">
+                                {{-- <div class="col-lg-12 d-flex justify-content-center mt-4">
                                     <a href="#" class="text-white">Daftar Akun</a>
-                                </div>
+                                </div> --}}
                             </div>
                         </form>
                     </div>
