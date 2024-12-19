@@ -1,0 +1,47 @@
+<?php
+
+namespace Database\Seeders;
+
+use App\Models\MyClass;
+use App\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+
+class SubjectsTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('subjects')->delete();
+
+        $this->createSubjects();
+    }
+
+    protected function createSubjects()
+    {
+        $subjects = ['Basis Data'];
+        $sub_slug = ['BD'];
+        $teacher_id = User::where(['user_type' => 'teacher'])->first()->id;
+        $my_classes = MyClass::all();
+
+        foreach ($my_classes as $my_class) {
+
+            $data = [
+                [
+                    'name' => $subjects[0],
+                    'slug' => $sub_slug[0],
+                    'my_class_id' => $my_class->id,
+                    'teacher_id' => $teacher_id,
+                    'hari' => 2,
+                    'jam_mulai' => '08:00:00',
+                    'jam_selesai' => '09:20:00',
+                ]
+            ];
+            DB::table('subjects')->insert($data);
+        }
+    }
+}
